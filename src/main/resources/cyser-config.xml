@@ -1,0 +1,37 @@
+<flex-config>
+	<output>../../target/cyser-0.1.swc</output>
+	<target-player>10.0.0</target-player>
+	<benchmark>false</benchmark>
+	<warnings>true</warnings>
+
+	<compiler>
+		<debug>true</debug>
+
+		<keep-generated-actionscript>false</keep-generated-actionscript>
+
+		<source-path>
+			<path-element>../actionscript</path-element>
+		</source-path>
+
+		<!--
+		<namespaces>
+			<namespace>
+				<uri>library://ns.leafedbox.com/cyser/2010</uri>
+				<manifest>manifest.xml</manifest>
+			</namespace>
+		</namespaces>
+		-->
+	</compiler>
+
+	<include-classes>
+		<class>CyserClasses</class>
+	</include-classes>
+
+	<metadata>
+		<creator>Ben Johnson</creator>
+		<contributor>Ben Johnson</contributor>
+		<description>A library for controlling Flash objects through an external interface.</description>
+		<language>EN</language>
+		<title>cyser</title>
+	</metadata>
+</flex-config>

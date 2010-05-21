@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flexUnitUIRunner="http://www.adobe.com/2009/flexUnitUIRunner"
+	creationComplete="onCreationComplete(event)"
+	layout="absolute"
+>
+	<mx:Script>
+		<![CDATA[
+			import mx.logging.LogEventLevel;
+			import org.flexunit.internals.TextListener;
+			import org.flexunit.internals.TraceListener;
+			import org.flexunit.listeners.CIListener;
+			import org.flexunit.listeners.UIListener;
+			import org.flexunit.runner.FlexUnitCore;
+
+			import cyser.CyserSuite;
+
+			public function onCreationComplete(event:Event):void
+			{
+				var core:FlexUnitCore = new FlexUnitCore();
+				core.addListener(new CIListener());
+				core.addListener(new UIListener(uiListener));
+				core.run(CyserSuite);
+			}
+		]]>
+	</mx:Script>
+
+	<flexUnitUIRunner:TestRunnerBase id="uiListener" width="100%" height="100%"/>
+</mx:Application>

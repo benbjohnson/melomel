@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="cyser" basedir=".">
+	<!-- Properties -->
+	<property environment="env"/>
+	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+    <property name="compc.jar" value="${FLEX_HOME}/lib/compc.jar" />
+    <property name="mxmlc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
+
+	<property name="doc.dir" value="${basedir}/doc"/>
+	<property name="etc.dir" value="${basedir}/etc"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="target.dir" value="${basedir}/target"/>
+
+	<!-- Task Definitions -->
+	<taskdef resource="flexTasks.tasks" classpath="${etc.dir}/flexTasks.jar" />
+	<taskdef resource="flexUnitTasks.tasks" classpath="${etc.dir}/flexUnitTasks-4.0.0.jar" />
+
+	<!-- Target: Compile -->
+	<!-- compc -load-config+=src/main/resources/cyser-config.xml -->
+	<target name="compile">
+		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
+			<jvmarg value="-Xmx1024M"/>
+			<jvmarg value="-Xms512M"/>
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="-load-config+=${src.dir}/main/resources/cyser-config.xml"/>
+		</java>
+	</target>
+	
+	<!-- Target: Test -->
+	<!-- mxmlc +configname=air -load-config+=src/test/resources/TestRunner-config.xml src/test/flex/TestRunner.mxml -->
+	<target name="test-compile">
+		<mkdir dir="${target.dir}/test"/>
+
+		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
+			<jvmarg value="-Xmx1024M"/>
+			<jvmarg value="-Xms512M"/>
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="+configname=air"/>
+			<arg value="-load-config+=${src.dir}/test/resources/TestRunner-config.xml"/>
+			<arg value="${src.dir}/test/flex/TestRunner.mxml"/>
+		</java>
+	</target>
+	
+	<target name="test-run">
+		<flexunit
+			player="air"
+			swf="${target.dir}/test/TestRunner.swf"
+			toDir="${target.dir}/test"
+			haltonfailure="false" verbose="true"
+			localTrusted="true"
+			headless="true"
+		/>
+	</target>
+
+	<target name="test-report" depends="test-run">
+		<junitreport todir="${target.dir}/test">
+			<fileset dir="${target.dir}/test">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${target.dir}/test/html" />
+		</junitreport>
+	</target>
+
+	<target name="test" depends="test-compile,test-run,test-report"/>
+
+
+	<!-- Target: Documentation -->
+	<target name="docs">
+		<mkdir dir="${target.dir}/doc"/>
+
+		<!-- Find classes -->
+		<path id="files">
+			<fileset dir="${src.dir}/main/flex">
+				<include name="**/**"/>
+			</fileset>
+		</path>
+		<pathconvert property="classes" pathsep=" " dirsep="." refid="files">
+			<map from="${src.dir}/main/flex/" to=""/>
+			<mapper>
+				<chainedmapper><globmapper from="*.as" to="*"/></chainedmapper>
+			</mapper>
+		</pathconvert>
+
+		<exec executable="${FLEX_HOME}/bin/asdoc" failonerror="true">
+			<arg line="-source-path+=${src.dir}/main/flex"/>
+			<arg line="-doc-classes ${classes}"/>
+			<arg line="-window-title 'Cyser'"/>
+			<arg line="-output ${doc.dir}/flex"/>
+		</exec>
+	</target>
+
+	<!-- Target: Clean -->
+	<target name="clean">
+		<delete dir="${target.dir}"/>
+	</target>
+</project>
