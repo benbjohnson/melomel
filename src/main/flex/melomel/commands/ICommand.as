@@ -26,6 +26,11 @@ public interface ICommand
 	//--------------------------------------------------------------------------
 
 	/**
+	 *	Parses an XML-formatted message.
+	 */
+	function parse(message:XML):void;
+
+	/**
 	 *	Executes the given action.
 	 */
 	function execute():void;
