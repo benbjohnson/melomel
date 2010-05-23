@@ -14,14 +14,14 @@
 			import org.flexunit.listeners.UIListener;
 			import org.flexunit.runner.FlexUnitCore;
 
-			import cyser.CyserSuite;
+			import melomel.MelomelSuite;
 
 			public function onCreationComplete(event:Event):void
 			{
 				var core:FlexUnitCore = new FlexUnitCore();
 				core.addListener(new CIListener());
 				core.addListener(new UIListener(uiListener));
-				core.run(CyserSuite);
+				core.run(MelomelSuite);
 			}
 		]]>
 	</mx:Script>

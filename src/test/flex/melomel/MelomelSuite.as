@@ -1,10 +1,10 @@
-package cyser
+package melomel
 {
-	import cyser.core.CoreSuite;
+	import melomel.core.CoreSuite;
 
 	[Suite]
 	[RunWith("org.flexunit.runners.Suite")]
-	public class CyserSuite
+	public class MelomelSuite
 	{
 		public var s0:CoreSuite;
 	}

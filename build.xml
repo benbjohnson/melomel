@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="cyser" basedir=".">
+<project name="melomel" basedir=".">
 	<!-- Properties -->
 	<property environment="env"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
@@ -16,13 +16,13 @@
 	<taskdef resource="flexUnitTasks.tasks" classpath="${etc.dir}/flexUnitTasks-4.0.0.jar" />
 
 	<!-- Target: Compile -->
-	<!-- compc -load-config+=src/main/resources/cyser-config.xml -->
+	<!-- compc -load-config+=src/main/resources/melomel-config.xml -->
 	<target name="compile">
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<jvmarg value="-Xmx1024M"/>
 			<jvmarg value="-Xms512M"/>
 			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
-			<arg value="-load-config+=${src.dir}/main/resources/cyser-config.xml"/>
+			<arg value="-load-config+=${src.dir}/main/resources/melomel-config.xml"/>
 		</java>
 	</target>
 	
@@ -84,7 +84,7 @@
 		<exec executable="${FLEX_HOME}/bin/asdoc" failonerror="true">
 			<arg line="-source-path+=${src.dir}/main/flex"/>
 			<arg line="-doc-classes ${classes}"/>
-			<arg line="-window-title 'Cyser'"/>
+			<arg line="-window-title 'Melomel'"/>
 			<arg line="-output ${doc.dir}/flex"/>
 		</exec>
 	</target>

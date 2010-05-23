@@ -6,44 +6,28 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
+ * @author Ben Johnson
  */
 package
 {
 import flash.events.EventDispatcher;
 
 /**
- *	This class is the public interface for interacting with the Cyser bridge.
+ *	This interface defines a class that can be associated with an action and
+ *	can execute the action.
  */
-public class Cyser extends EventDispatcher
+public interface ICommand
 {
-	//--------------------------------------------------------------------------
-	//
-	//	Constructor
-	//
-	//--------------------------------------------------------------------------
-
-	/**
-	 *	Constructor.
-	 */
-	public function Cyser()
-	{
-		super();
-	}
-
-
-	//--------------------------------------------------------------------------
-	//
-	//	Properties
-	//
-	//--------------------------------------------------------------------------
-
-
-
 	//--------------------------------------------------------------------------
 	//
 	//	Methods
 	//
 	//--------------------------------------------------------------------------
 
+	/**
+	 *	Executes the given action.
+	 */
+	function execute():void;
 }
 }

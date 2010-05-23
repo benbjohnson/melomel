@@ -1,5 +1,5 @@
 <flex-config>
-	<output>../../target/cyser-0.1.swc</output>
+	<output>../../target/melomel-0.1.swc</output>
 	<target-player>10.0.0</target-player>
 	<benchmark>false</benchmark>
 	<warnings>true</warnings>
@@ -16,7 +16,7 @@
 		<!--
 		<namespaces>
 			<namespace>
-				<uri>library://ns.leafedbox.com/cyser/2010</uri>
+				<uri>library://ns.leafedbox.com/melomel/2010</uri>
 				<manifest>manifest.xml</manifest>
 			</namespace>
 		</namespaces>
@@ -24,7 +24,7 @@
 	</compiler>
 
 	<include-classes>
-		<class>CyserClasses</class>
+		<class>MelomelClasses</class>
 	</include-classes>
 
 	<metadata>
@@ -32,6 +32,6 @@
 		<contributor>Ben Johnson</contributor>
 		<description>A library for controlling Flash objects through an external interface.</description>
 		<language>EN</language>
-		<title>cyser</title>
+		<title>melomel</title>
 	</metadata>
 </flex-config>
