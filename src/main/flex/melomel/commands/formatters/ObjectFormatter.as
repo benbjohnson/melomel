@@ -9,19 +9,22 @@
  *
  * @author Ben Johnson
  */
-package melomel.commands.parsers
+package melomel.commands.formatters
 {
 import melomel.core.ObjectProxy;
 import melomel.core.ObjectProxyManager;
-import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
 import flash.errors.IllegalOperationError;
 
 /**
- *	This is the base class for parsers that use an object proxy manager.
+ *	This class formats objects into XML messages in the following format:
+ *
+ *	<pre>
+ *	&lt;return value="" dataType=""/&gt;
+ *	</pre>
  */
-public class ObjectProxyCommandParser
+public class ObjectFormatter
 {
 	//--------------------------------------------------------------------------
 	//
@@ -32,11 +35,11 @@ public class ObjectProxyCommandParser
 	/**
 	 *	Constructor.
 	 */
-	public function ObjectProxyCommandParser(manager:ObjectProxyManager)
+	public function ObjectFormatter(manager:ObjectProxyManager)
 	{
 		// Throw an error if proxy manager is missing
 		if(!manager) {
-			throw new IllegalOperationError("Object proxy manager is required for parser");
+			throw new IllegalOperationError("Object proxy manager is required for formatter");
 		}
 		
 		// Set manager
@@ -67,52 +70,39 @@ public class ObjectProxyCommandParser
 	//--------------------------------------------------------------------------
 
 	/**
-	 *	Parses an argument node. Argument nodes are references to values that
-	 *	contain the value and data type.
+	 *	Formats a value as a return object.
 	 *	
-	 *	@param xml      The argument node.
+	 *	@param value  The value to format.
 	 *	
-	 *	@return         The primitive value.
+	 *	@return       An XML formatted return message.
 	 */
-	protected function parseMessageArgument(xml:XML):Object
+	public function format(value:Object):XML
 	{
-		// Verify node
-		if(!xml) {
-			throw new IllegalOperationError("Message argument xml is required");
-		}
-
-		// Extract data from node
-		var valueString:String = xml.@value;
-		var dataType:String    = xml.@dataType;
+		var message:XML = new XML('<return/>');
 		
-		// Parse object proxy
-		if(dataType == "object") {
-			var object:Object = manager.getItemById(parseInt(valueString));
-			if(!object) {
-				throw new IllegalOperationError("Object #" + valueString + " does not exist");
-			}
-			return object;
+		// Format objects
+		if(typeof(value) == "object") {
+			var proxy:ObjectProxy = manager.addItem(value);
+			message.@value    = proxy.id;
+			message.@dataType = "object";
 		}
-		// Parse int
-		else if(dataType == "int") {
-			return parseInt(valueString);
+		// Format numbers
+		else if(typeof(value) == "number") {
+			message.@value    = value;
+			message.@dataType = (Math.floor(value as Number) == value ? "int" : "float");
 		}
-		// Parse float
-		else if(dataType == "float") {
-			return parseFloat(valueString);
+		// Format boolean values
+		else if(typeof(value) == "boolean") {
+			message.@value    = value;
+			message.@dataType = "boolean";
 		}
-		// Parse boolean
-		else if(dataType == "boolean") {
-			return (valueString == "true");
-		}
-		// Parse string
-		else if(dataType == "string" || dataType == "" || !dataType) {
-			return valueString;
-		}
-		// Invalid data type
+		// Format everything else as a string
 		else {
-			throw new IllegalOperationError("Invalid data type: " + dataType);
+			message.@value    = value;
+			message.@dataType = "string";
 		}
+		
+		return message;
 	}
 }
 }

@@ -28,9 +28,8 @@ public class InvokeMethodCommandParserTest
 	public function setUp():void
 	{
 		object = {};
-		proxy = new ObjectProxy(object);
 		manager = new ObjectProxyManager();
-		manager.addItem(proxy);
+		proxy = manager.addItem(object);
 		parser = new InvokeMethodCommandParser(manager);
 	}
 

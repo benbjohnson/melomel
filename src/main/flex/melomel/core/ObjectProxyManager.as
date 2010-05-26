@@ -15,6 +15,7 @@ import melomel.core.ObjectProxy;
 
 import flash.events.EventDispatcher;
 import flash.errors.IllegalOperationError;
+import flash.utils.Dictionary;
 
 /**
  *	This class defines a manager of proxied objects. Proxied objects have a
@@ -55,6 +56,11 @@ public class ObjectProxyManager extends EventDispatcher
 	 */
 	private var proxies:Object = {};
 
+	/**
+	 *	A lookup of proxies by object.
+	 */
+	private var objects:Dictionary = new Dictionary();
+
 
 	//--------------------------------------------------------------------------
 	//
@@ -73,35 +79,55 @@ public class ObjectProxyManager extends EventDispatcher
 	 *	
 	 *	@return    The object proxy.
 	 */
-	public function getItem(id:int):ObjectProxy
+	public function getItemById(id:int):Object
 	{
-		return proxies[id] as ObjectProxy;
+		var proxy:ObjectProxy = proxies[id] as ObjectProxy;
+		if(proxy) {
+			return proxy.object;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	/**
-	 *	Adds a proxy object to the manager.
+	 *	Adds a object to the manager.
 	 *	
-	 *	@param proxy  The object proxy to add to the manager.
+	 *	@param object  The object proxy to add to the manager.
 	 */
-	public function addItem(proxy:ObjectProxy):void
+	public function addItem(object:Object):ObjectProxy
 	{
-		if(!proxy) {
-			throw new IllegalOperationError("Proxy required when adding to ObjectProxyManager");
+		var proxy:ObjectProxy;
+		
+		if(!object) {
+			throw new IllegalOperationError("Object is required");
 		}
 		
-		proxies[proxy.id] = proxy;
+		// If object is already proxied, return existing reference
+		if(objects[object]) {
+			proxy = objects[object] as ObjectProxy;
+		}
+		// Otherwise create a new proxy
+		else {
+			proxy = new ObjectProxy(object);
+			proxies[proxy.id]     = proxy;
+			objects[proxy.object] = proxy;
+		}
+		
+		return proxy;
 	}
 	
 	/**
-	 *	Removes a proxy object from the manager.
+	 *	Removes an object from the manager.
 	 *	
-	 *	@param proxy  The object proxy to remove from the manager.
+	 *	@param object  The object to remove from the manager.
 	 */
-	public function removeItem(proxy:ObjectProxy):void
+	public function removeItem(object:Object):void
 	{
+		var proxy:ObjectProxy = objects[object] as ObjectProxy;
 		if(proxy) {
-			proxies[proxy.id] = null;
 			delete proxies[proxy.id];
+			delete objects[proxy.object];
 		}
 	}
 	
@@ -110,10 +136,11 @@ public class ObjectProxyManager extends EventDispatcher
 	 */
 	public function removeAllItems():void
 	{
-		for each(var proxy:ObjectProxy in proxies) {
-			removeItem(proxy);
+		for each(var object:Object in objects) {
+			removeItem(object);
 		}
 		proxies = {};
+		objects = new Dictionary();
 	}
 }
 }

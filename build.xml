@@ -26,6 +26,18 @@
 		</java>
 	</target>
 	
+	<!-- Target: Bridge -->
+	<!-- mxmlc -load-config+=src/test/resources/BridgeRunner-config.xml src/test/flex/BridgeRunner.mxml -->
+	<target name="test-compile">
+		<mkdir dir="${target.dir}/test"/>
+
+		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="-load-config+=${src.dir}/test/resources/BridgeRunner-config.xml"/>
+			<arg value="${src.dir}/test/flex/BridgeRunner.mxml"/>
+		</java>
+	</target>
+	
 	<!-- Target: Test -->
 	<!-- mxmlc +configname=air -load-config+=src/test/resources/TestRunner-config.xml src/test/flex/TestRunner.mxml -->
 	<target name="test-compile">

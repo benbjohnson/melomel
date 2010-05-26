@@ -28,9 +28,8 @@ public class SetPropertyCommandParserTest
 	public function setUp():void
 	{
 		object = {};
-		proxy = new ObjectProxy(object);
 		manager = new ObjectProxyManager();
-		manager.addItem(proxy);
+		proxy = manager.addItem(object);
 		parser = new SetPropertyCommandParser(manager);
 	}
 
@@ -179,8 +178,7 @@ public class SetPropertyCommandParserTest
 	public function parseObjectArgument():void
 	{
 		var object:Object = {};
-		var proxy2:ObjectProxy = new ObjectProxy(object);
-		manager.addItem(proxy2);
+		var proxy2:ObjectProxy = manager.addItem(object);
 
 		var message:XML = <set property="foo"><arg dataType="object"/></set>;
 		message.@object = proxy.id;

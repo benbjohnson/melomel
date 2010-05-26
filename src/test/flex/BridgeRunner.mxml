@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="onCreationComplete(event)"
+>
+	<mx:Script>
+		<![CDATA[
+		import melomel.core.Bridge;
+
+		public function onCreationComplete(event:Event):void
+		{
+			trace("Connecting to bridge");
+			var bridge:Bridge = new Bridge();
+			bridge.addEventListener(Event.CONNECT, function(event:Event):void{
+				trace("sending...");
+				bridge.send('<return value="foo"/>');
+			});
+			bridge.connect();
+		}
+		]]>
+	</mx:Script>
+</mx:Application>

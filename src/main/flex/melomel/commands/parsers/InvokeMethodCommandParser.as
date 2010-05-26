@@ -70,7 +70,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 		// Extract data from message
 		var action:String     = message.localName();
 		var proxyId:Number    = parseInt(message.@object);
-		var proxy:ObjectProxy = manager.getItem(proxyId);
+		var object:Object     = manager.getItemById(proxyId);
 		var methodName:String = message.@method;
 		
 		// Verify message action
@@ -82,7 +82,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 			throw new IllegalOperationError("Missing 'object' reference in message");
 		}
 		// Verify proxy exists
-		else if(!proxy) {
+		else if(!object) {
 			throw new IllegalOperationError("Object #" + proxyId + " does not exist");
 		}
 		// Verify method name exists
@@ -97,7 +97,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 		}
 		
 		// Return command
-		return new InvokeMethodCommand(proxy.object, methodName, methodArgs);
+		return new InvokeMethodCommand(object, methodName, methodArgs);
 	}
 }
 }

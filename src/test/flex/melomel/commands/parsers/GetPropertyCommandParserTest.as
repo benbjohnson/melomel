@@ -28,9 +28,8 @@ public class GetPropertyCommandParserTest
 	public function setUp():void
 	{
 		object = {};
-		proxy = new ObjectProxy(object);
 		manager = new ObjectProxyManager();
-		manager.addItem(proxy);
+		proxy = manager.addItem(object);
 		parser = new GetPropertyCommandParser(manager);
 	}
 
@@ -63,8 +62,8 @@ public class GetPropertyCommandParserTest
 
 		// Parse message
 		command = parser.parse(message) as GetPropertyCommand;
-		Assert.assertEquals(command.object, object);
-		Assert.assertEquals(command.property, "name");
+		Assert.assertEquals(object, command.object);
+		Assert.assertEquals("name", command.property);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]

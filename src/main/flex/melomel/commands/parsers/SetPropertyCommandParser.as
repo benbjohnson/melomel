@@ -73,7 +73,7 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		// Extract data from message
 		var action:String     = message.localName();
 		var proxyId:Number    = parseInt(message.@object);
-		var proxy:ObjectProxy = manager.getItem(proxyId);
+		var object:Object     = manager.getItemById(proxyId);
 		var property:String   = message.@property;
 		
 		// Verify message action
@@ -85,7 +85,7 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 			throw new IllegalOperationError("Missing 'object' reference in message");
 		}
 		// Verify proxy exists
-		else if(!proxy) {
+		else if(!object) {
 			throw new IllegalOperationError("Object #" + proxyId + " does not exist");
 		}
 		// Verify property exists
@@ -97,7 +97,7 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		var value:Object = parseMessageArgument(message.arg[0]);
 		
 		// Return command
-		return new SetPropertyCommand(proxy.object, property, value);
+		return new SetPropertyCommand(object, property, value);
 	}
 }
 }

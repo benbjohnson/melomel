@@ -1,12 +1,14 @@
 package melomel.commands
 {
+import melomel.commands.formatters.FormattersSuite;
 import melomel.commands.parsers.ParsersSuite;
 
 [Suite]
 [RunWith("org.flexunit.runners.Suite")]
 public class CommandsSuite
 {
-	public var s0:ParsersSuite;
+	public var s0:FormattersSuite;
+	public var s1:ParsersSuite;
 
 	public var t0:GetClassCommandTest;
 	public var t1:GetPropertyCommandTest;

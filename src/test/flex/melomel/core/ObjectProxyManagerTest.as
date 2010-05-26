@@ -13,10 +13,12 @@ public class ObjectProxyManagerTest
 	
 	private var manager:ObjectProxyManager;
 	private var proxy:ObjectProxy;
+	private var object:Object;
 	
 	[Before]
 	public function setUp():void
 	{
+		object = {};
 		manager = new ObjectProxyManager();
 	}
 	
@@ -34,9 +36,9 @@ public class ObjectProxyManagerTest
 	[Test]
 	public function addedItemShouldBeAvailableForRetrieval():void
 	{
-		proxy = new ObjectProxy({});
-		manager.addItem(proxy);
-		Assert.assertEquals(proxy, manager.getItem(proxy.id));
+		var object:Object = {};
+		proxy = manager.addItem(object);
+		Assert.assertEquals(object, manager.getItemById(proxy.id));
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
@@ -46,21 +48,37 @@ public class ObjectProxyManagerTest
 	}
 
 	[Test]
+	public function addedItemTwiceShouldReuseProxy():void
+	{
+		var pa:ObjectProxy = manager.addItem(object);
+		var pb:ObjectProxy = manager.addItem(object);
+		Assert.assertEquals(pa, pb);
+	}
+
+	[Test]
+	public function addingTwoItemsShouldHaveDifferentProxies():void
+	{
+		var a:Object = {};
+		var b:Object = {};
+		var pa:ObjectProxy = manager.addItem(a);
+		var pb:ObjectProxy = manager.addItem(b);
+		Assert.assertTrue(pa != pb);
+	}
+
+	[Test]
 	public function removingItemShouldMakeItUnavailable():void
 	{
-		proxy = new ObjectProxy({});
-		manager.addItem(proxy);
-		manager.removeItem(proxy);
-		Assert.assertNull(manager.getItem(proxy.id));
+		proxy = manager.addItem(object);
+		manager.removeItem(object);
+		Assert.assertNull(manager.getItemById(proxy.id));
 	}
 
 	[Test]
 	public function removingAllItemsShouldMakeThemUnavailable():void
 	{
-		proxy = new ObjectProxy({});
-		manager.addItem(proxy);
+		proxy = manager.addItem(object);
 		manager.removeAllItems();
-		Assert.assertNull(manager.getItem(proxy.id));
+		Assert.assertNull(manager.getItemById(proxy.id));
 	}
 }
 }

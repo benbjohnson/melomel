@@ -1,7 +1,5 @@
 package melomel.commands.parsers
 {
-import melomel.core.ObjectProxy;
-import melomel.core.ObjectProxyManager;
 import melomel.commands.GetClassCommand;
 
 import org.flexunit.Assert;

@@ -1,0 +1,19 @@
+<flex-config>
+	<output>../../../target/test/BridgeRunner.swf</output>
+	<target-player>10.0.0</target-player>
+	<benchmark>false</benchmark>
+	<warnings>true</warnings>
+
+	<compiler>
+		<debug>true</debug>
+		<allow-source-path-overlap>true</allow-source-path-overlap>
+		
+		<source-path>
+			<path-element>../../main/flex</path-element>
+			<path-element>../flex</path-element>
+		</source-path>
+
+		<verbose-stacktraces>true</verbose-stacktraces>
+		<headless-server>true</headless-server>
+	</compiler>
+</flex-config>
