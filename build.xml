@@ -61,6 +61,10 @@
 		</junitreport>
 	</target>
 
+	<target name="test-copy-deps">
+		<copy file="${src.dir}/test/resources/TestRunner-app.xml" tofile="${target.dir}/test/TestRunner-app.xml" overwrite="true"/>
+	</target>
+
 	<target name="test" depends="test-compile,test-run,test-report"/>
 
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<application xmlns="http://ns.adobe.com/air/application/2.0beta2">
+    <id>melomel.TestRunner</id>
+    <version>1.0</version>
+    <filename>TestRunner</filename>
+    <name>Melomel TestRunner</name>
+    <initialWindow>
+        <title>TestRunner</title>
+        <content>TestRunner.swf</content>
+        <systemChrome>standard</systemChrome>
+        <transparent>false</transparent>
+        <visible>true</visible>
+        <minimizable>true</minimizable>
+        <maximizable>false</maximizable>
+        <resizable>true</resizable>
+        <x>0</x>
+        <y>0</y>
+        <width>1024</width>
+        <height>600</height>
+        <minSize>320 240</minSize>
+        <maxSize>1280 960</maxSize>
+    </initialWindow> 
+    <installFolder>Melomel/TestRunner</installFolder>
+    <programMenuFolder>Melomel</programMenuFolder>
+    <customUpdateUI>false</customUpdateUI>
+    <allowBrowserInvocation>false</allowBrowserInvocation>
+</application>

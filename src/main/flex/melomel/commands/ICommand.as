@@ -9,7 +9,7 @@
  *
  * @author Ben Johnson
  */
-package
+package melomel.commands
 {
 import flash.events.EventDispatcher;
 
@@ -26,13 +26,10 @@ public interface ICommand
 	//--------------------------------------------------------------------------
 
 	/**
-	 *	Parses an XML-formatted message.
+	 *	Executes the command.
+	 *	
+	 *	@return  The return value from the execution.
 	 */
-	function parse(message:XML):void;
-
-	/**
-	 *	Executes the given action.
-	 */
-	function execute():void;
+	function execute():Object;
 }
 }
