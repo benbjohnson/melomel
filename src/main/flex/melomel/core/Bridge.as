@@ -11,13 +11,25 @@
  */
 package melomel.core
 {
+import melomel.commands.ICommand;
+import melomel.commands.formatters.ObjectFormatter;
+import melomel.commands.parsers.ICommandParser;
+import melomel.commands.parsers.GetClassCommandParser;
+import melomel.commands.parsers.GetPropertyCommandParser;
+import melomel.commands.parsers.SetPropertyCommandParser;
+import melomel.commands.parsers.InvokeMethodCommandParser;
+import melomel.commands.parsers.CreateObjectCommandParser;
+import melomel.net.ISocket;
+import melomel.net.XMLSocket;
+
 import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
 import flash.errors.IllegalOperationError;
-import flash.net.XMLSocket;
+import flash.utils.clearTimeout;
+import flash.utils.setTimeout;
 
 /**
  *	This class manages the connection between the external interface and the
@@ -42,7 +54,7 @@ public class Bridge extends EventDispatcher
 		this.port = port;
 		
 		// Setup object proxy manager
-		objectProxyManager = new ObjectProxyManager();
+		_objectProxyManager = new ObjectProxyManager();
 		
 		// Setup standard parsers
 		setParser("get-class", new GetClassCommandParser());
@@ -52,7 +64,7 @@ public class Bridge extends EventDispatcher
 		setParser("create", new CreateObjectCommandParser());
 		
 		// Setup standard formatter
-		formatter = new CommandFormatter(objectProxyManager);
+		formatter = new ObjectFormatter(objectProxyManager);
 	}
 	
 
@@ -67,9 +79,14 @@ public class Bridge extends EventDispatcher
 	//---------------------------------
 
 	/**
-	 *	The hostname to connect to.
+	 *	The socket connection used to communicate with the external interface.
 	 */
-	private var socket:XMLSocket;
+	protected var socket:ISocket;
+
+	/**
+	 *	The class to instantiate the socket from.
+	 */
+	protected var socketClass:Class = XMLSocket;
 
 	/**
 	 *	The hostname to connect to.
@@ -80,6 +97,53 @@ public class Bridge extends EventDispatcher
 	 *	The port to connect to on the host.
 	 */
 	public var port:int;
+
+	/**
+	 *	The length of time, in milliseconds, to wait in between retries when
+	 *	connecting to the external interface. If this is set to zero, the
+	 *	connection is not retried when it fails.
+	 */
+	public var retryDelay:int = 1000;
+
+	/**
+	 *	The timeout identifier for connection attempts.
+	 */
+	private var connectTimeoutId:int = 0;
+
+
+	//---------------------------------
+	//	Object proxy manager
+	//---------------------------------
+
+	private var _objectProxyManager:ObjectProxyManager;
+
+	/**
+	 *	The proxy manager.
+	 */
+	public function get objectProxyManager():ObjectProxyManager
+	{
+		return _objectProxyManager;
+	}
+
+
+	//---------------------------------
+	//	Parsers
+	//---------------------------------
+
+	/**
+	 *	A lookup of parsers by action.
+	 */
+	private var parsers:Object = {};
+
+
+	//---------------------------------
+	//	Formatter
+	//---------------------------------
+
+	/**
+	 *	The formatter to use for outgoing messages.
+	 */
+	public var formatter:ObjectFormatter;
 
 
 	//--------------------------------------------------------------------------
@@ -97,13 +161,18 @@ public class Bridge extends EventDispatcher
 	 */
 	public function connect():void
 	{
-		socket = new XMLSocket();
+		socket = new socketClass();
 		socket.addEventListener(Event.CONNECT, socket_onConnect);
 		socket.addEventListener(Event.CLOSE, socket_onClose);
 		socket.addEventListener(DataEvent.DATA, socket_onData);
 		socket.addEventListener(IOErrorEvent.IO_ERROR, socket_onIOError);
 		socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, socket_onSecurityError);
 		socket.connect(host, port);
+		
+		// Attempt connection again if not connected
+		if(retryDelay > 0) {
+			connectTimeoutId = setTimeout(connect, retryDelay);
+		}
 	}
 	
 	/**
@@ -111,6 +180,11 @@ public class Bridge extends EventDispatcher
 	 */
 	public function disconnect():void
 	{
+		// Stop any retries
+		clearTimeout(connectTimeoutId);
+		connectTimeoutId = 0;
+		
+		// If a socket has been created, close it out.
 		if(socket) {
 			socket.close();
 			socket.removeEventListener(Event.CONNECT, socket_onConnect);
@@ -129,7 +203,7 @@ public class Bridge extends EventDispatcher
 	 */
 	public function send(message:XML):void
 	{
-		trace("send> " + message.toXMLString());
+		if(Melomel.debug) trace("send> " + message.toXMLString());
 		if(socket && socket.connected) {
 			socket.send(message);
 		}
@@ -145,7 +219,7 @@ public class Bridge extends EventDispatcher
 	 */
 	public function receive(message:XML):void
 	{
-		trace("recv> " + message.toXMLString());
+		if(Melomel.debug) trace("recv> " + message.toXMLString());
 
 		// Locate parser for message
 		var action:String = message.localName().toString();
@@ -205,13 +279,15 @@ public class Bridge extends EventDispatcher
 	
 	private function socket_onConnect(event:Event):void
 	{
-		trace("[CONNECT]");
+		if(Melomel.debug) trace("[CONNECT]");
+		clearTimeout(connectTimeoutId);
+		connectTimeoutId = 0;
 		dispatchEvent(new Event(Event.CONNECT));
 	}
 	
 	private function socket_onClose(event:Event):void
 	{
-		trace("[CLOSE]");
+		if(Melomel.debug) trace("[CLOSE]");
 		disconnect();
 		dispatchEvent(new Event(Event.CLOSE));
 	}
@@ -223,12 +299,12 @@ public class Bridge extends EventDispatcher
 	
 	private function socket_onIOError(event:IOErrorEvent):void
 	{
-		trace("[IO_ERROR] " + event.text);
+		if(Melomel.debug) trace("[IO_ERROR] " + event.text);
 	}
 	
 	private function socket_onSecurityError(event:SecurityErrorEvent):void
 	{
-		trace("[SECURITY_ERROR] " + event.text);
+		if(Melomel.debug) trace("[SECURITY_ERROR] " + event.text);
 	}
 }
 }

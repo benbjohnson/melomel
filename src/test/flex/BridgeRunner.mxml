@@ -13,7 +13,7 @@
 			var bridge:Bridge = new Bridge();
 			bridge.addEventListener(Event.CONNECT, function(event:Event):void{
 				trace("sending...");
-				bridge.send('<return value="foo"/>');
+				bridge.send(<return value="foo"/>);
 			});
 			bridge.connect();
 		}
