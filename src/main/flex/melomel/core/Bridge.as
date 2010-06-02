@@ -19,8 +19,6 @@ import melomel.commands.parsers.GetPropertyCommandParser;
 import melomel.commands.parsers.SetPropertyCommandParser;
 import melomel.commands.parsers.InvokeMethodCommandParser;
 import melomel.commands.parsers.CreateObjectCommandParser;
-import melomel.net.ISocket;
-import melomel.net.XMLSocket;
 
 import flash.events.DataEvent;
 import flash.events.Event;
@@ -28,6 +26,7 @@ import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
 import flash.errors.IllegalOperationError;
+import flash.net.XMLSocket;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
@@ -81,7 +80,7 @@ public class Bridge extends EventDispatcher
 	/**
 	 *	The socket connection used to communicate with the external interface.
 	 */
-	protected var socket:ISocket;
+	protected var socket:XMLSocket;
 
 	/**
 	 *	The class to instantiate the socket from.

@@ -1,6 +1,5 @@
 package melomel.core
 {
-import melomel.net.ISocket;
 import melomel.net.MockXMLSocket;
 
 public class MockBridge extends Bridge
@@ -27,9 +26,9 @@ public class MockBridge extends Bridge
 	//
 	//--------------------------------------------------------------------------
 
-	public function getSocket():ISocket
+	public function getSocket():MockXMLSocket
 	{
-		return socket;
+		return socket as MockXMLSocket;
 	}
 }
 }

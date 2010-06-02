@@ -1,7 +1,6 @@
 package melomel.core
 {
 import melomel.commands.parsers.*;
-import melomel.net.ISocket;
 import melomel.net.MockXMLSocket;
 
 import org.flexunit.Assert;

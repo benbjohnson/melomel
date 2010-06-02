@@ -3,9 +3,10 @@ package melomel.net
 import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.net.XMLSocket;
 import flash.utils.setTimeout;
 
-public class MockXMLSocket extends EventDispatcher implements ISocket
+public class MockXMLSocket extends XMLSocket
 {
 	//--------------------------------------------------------------------------
 	//
@@ -30,7 +31,7 @@ public class MockXMLSocket extends EventDispatcher implements ISocket
 
 	private var _connected:Boolean = false;
 	
-	public function get connected():Boolean
+	override public function get connected():Boolean
 	{
 		return _connected;
 	}
@@ -42,19 +43,19 @@ public class MockXMLSocket extends EventDispatcher implements ISocket
 	//
 	//--------------------------------------------------------------------------
 
-	public function connect(host:String, port:int):void {
+	override public function connect(host:String, port:int):void {
 		var self:MockXMLSocket = this;
 		_connected = true;
 		setTimeout(function():void{self.dispatchEvent(new Event(Event.CONNECT))}, 50);
 	}
 
-	public function close():void {
+	override public function close():void {
 		var self:MockXMLSocket = this;
 		_connected = false;
 		setTimeout(function():void{dispatchEvent(new Event(Event.CLOSE))}, 50);
 	}
 
-	public function send(object:*):void
+	override public function send(object:*):void
 	{
 		var data:String;
 		if(object == null) {
