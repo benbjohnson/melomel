@@ -18,7 +18,7 @@
 	<!-- Target: Compile -->
 	<!-- compc -load-config+=src/main/resources/melomel-config.xml -->
 	<target name="compile">
-		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
+		<java jar="${compc.jar}" fork="true" failonerror="true">
 			<jvmarg value="-Xmx1024M"/>
 			<jvmarg value="-Xms512M"/>
 			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
@@ -28,7 +28,7 @@
 	
 	<!-- Target: Bridge -->
 	<!-- mxmlc -load-config+=src/test/resources/BridgeRunner-config.xml src/test/flex/BridgeRunner.mxml -->
-	<target name="test-compile">
+	<target name="bridge-compile">
 		<mkdir dir="${target.dir}/test"/>
 
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">

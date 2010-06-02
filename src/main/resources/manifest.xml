@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<componentPackage>
+	<component id="Melomel" class="melomel.mxml.MXMLMelomel"/>
+</componentPackage>

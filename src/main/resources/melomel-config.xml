@@ -1,5 +1,5 @@
 <flex-config>
-	<output>../../target/melomel-0.1.swc</output>
+	<output>../../../target/melomel-1.0.swc</output>
 	<target-player>10.0.0</target-player>
 	<benchmark>false</benchmark>
 	<warnings>true</warnings>
@@ -10,17 +10,15 @@
 		<keep-generated-actionscript>false</keep-generated-actionscript>
 
 		<source-path>
-			<path-element>../actionscript</path-element>
+			<path-element>../flex</path-element>
 		</source-path>
 
-		<!--
 		<namespaces>
 			<namespace>
-				<uri>library://ns.leafedbox.com/melomel/2010</uri>
+				<uri>library://melomel/2010</uri>
 				<manifest>manifest.xml</manifest>
 			</namespace>
 		</namespaces>
-		-->
 	</compiler>
 
 	<include-classes>
