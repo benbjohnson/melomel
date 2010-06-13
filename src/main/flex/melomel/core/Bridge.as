@@ -281,6 +281,7 @@ public class Bridge extends EventDispatcher
 		if(Melomel.debug) trace("[CONNECT]");
 		clearTimeout(connectTimeoutId);
 		connectTimeoutId = 0;
+		send(<connect/>);
 		dispatchEvent(new Event(Event.CONNECT));
 	}
 	

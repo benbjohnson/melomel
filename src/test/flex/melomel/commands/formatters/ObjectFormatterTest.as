@@ -47,6 +47,13 @@ public class ObjectFormatterTest
 	//-----------------------------
 
 	[Test]
+	public function formatNull():void
+	{
+		message = formatter.format(null);
+		Assert.assertEquals('<return dataType="null"/>', message.toXMLString());
+	}
+
+	[Test]
 	public function formatString():void
 	{
 		message = formatter.format("foo");

@@ -85,8 +85,12 @@ public class ObjectProxyCommandParser
 		var valueString:String = xml.@value;
 		var dataType:String    = xml.@dataType;
 		
+		// Parse null
+		if(dataType == "null") {
+			return null;
+		}
 		// Parse object proxy
-		if(dataType == "object") {
+		else if(dataType == "object") {
 			var object:Object = manager.getItemById(parseInt(valueString));
 			if(!object) {
 				throw new IllegalOperationError("Object #" + valueString + " does not exist");

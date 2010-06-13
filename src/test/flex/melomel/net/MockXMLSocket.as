@@ -68,7 +68,10 @@ public class MockXMLSocket extends XMLSocket
 			data = object.toString();
 		}
 		
-		dispatchEvent(new DataEvent("send", false, false, data));
+		// Ignore the connect event
+		if(data != "<connect/>") {
+			dispatchEvent(new DataEvent("send", false, false, data));
+		}
 	}
 
 	public function receive(data:String):void

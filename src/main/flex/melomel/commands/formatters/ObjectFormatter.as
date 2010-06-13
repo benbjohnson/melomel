@@ -80,8 +80,12 @@ public class ObjectFormatter
 	{
 		var message:XML = new XML('<return/>');
 		
+		// Format null
+		if(value == null) {
+			message.@dataType = "null";
+		}
 		// Format objects
-		if(typeof(value) == "object") {
+		else if(typeof(value) == "object") {
 			var proxy:ObjectProxy = manager.addItem(value);
 			message.@value    = proxy.id;
 			message.@dataType = "object";

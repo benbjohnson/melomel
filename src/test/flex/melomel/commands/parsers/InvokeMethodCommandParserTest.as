@@ -86,19 +86,19 @@ public class InvokeMethodCommandParserTest
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function parseWithNoParametersThrowsError():void
 	{
-		parser.parse(<set/>);
+		parser.parse(<invoke/>);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function parseWithMissingObjectThrowsError():void
 	{
-		parser.parse(<set property="foo"><args><arg value="bar"/></args></set>);
+		parser.parse(<invoke property="foo"><args><arg value="bar"/></args></invoke>);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function parseWithMissingPropertyThrowsError():void
 	{
-		var message:XML = <set><args><arg value="foo"/></args></set>;
+		var message:XML = <invoke><args><arg value="foo"/></args></invoke>;
 		message.@object = proxy.id;
 		parser.parse(message);
 	}
@@ -106,7 +106,7 @@ public class InvokeMethodCommandParserTest
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function parseWithInvalidObjectProxy():void
 	{
-		parser.parse(<set object="100000" property="foo"><arg value="bar"/></set>);
+		parser.parse(<invoke object="100000" property="foo"><arg value="bar"/></invoke>);
 	}
 }
 }

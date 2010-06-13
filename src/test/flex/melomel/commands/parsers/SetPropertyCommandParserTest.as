@@ -121,6 +121,15 @@ public class SetPropertyCommandParserTest
 	//-----------------------------
 
 	[Test]
+	public function parseNullArgument():void
+	{
+		var message:XML = <set property="foo"><arg dataType="null"/></set>;
+		message.@object = proxy.id;
+		command = parser.parse(message) as SetPropertyCommand;
+		Assert.assertEquals(command.value, null);
+	}
+
+	[Test]
 	public function parseStringArgumentWithExplicitDataType():void
 	{
 		var message:XML = <set property="foo"><arg value="bar" dataType="string"/></set>;
