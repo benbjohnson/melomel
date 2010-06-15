@@ -24,6 +24,8 @@ import flash.errors.IllegalOperationError;
  */
 public class Melomel extends EventDispatcher
 {
+	MelomelClasses;
+
 	//--------------------------------------------------------------------------
 	//
 	//	Static properties

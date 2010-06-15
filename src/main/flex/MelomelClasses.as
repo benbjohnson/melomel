@@ -8,6 +8,7 @@ internal class MelomelClasses
 	import melomel.core.Bridge; Bridge;
 	import melomel.core.ObjectProxy; ObjectProxy;
 	import melomel.core.ObjectProxyManager; ObjectProxyManager;
+	import melomel.core.UI; UI;
 	
 	// Commands
 	import melomel.commands.GetClassCommand; GetClassCommand;
