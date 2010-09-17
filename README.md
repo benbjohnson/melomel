@@ -47,7 +47,7 @@ until successful.
 
 Note that no import is needed as `Melomel` is in the default package.
 
-To view debugging trace statements, you can also set `Melomel.debug` to `true.
+To view debugging trace statements, you can also set `Melomel.debug` to `true`.
 
 
 ## API DEFINITIONS
