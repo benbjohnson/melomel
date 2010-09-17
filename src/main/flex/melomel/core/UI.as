@@ -79,7 +79,6 @@ public class UI
 		// Attempt to default root if not specified
 		if(!root) {
 			root = topLevelApplication;
-			trace("app: " + root);
 		}
 		
 		// Verify class is not null
@@ -120,7 +119,7 @@ public class UI
 			}
 			
 			// If class and properties match then add to list of components
-			if(isMatch) {
+			if(isMatch && isVisible(root)) {
 				objects.push(root);
 			}
 		}
@@ -158,6 +157,36 @@ public class UI
 	{
 		var objects:Array = findAll(clazz, root, properties);
 		return objects.shift();
+	}
+
+	/**
+	 *	Checks if a display object is visible and all of its parents are
+	 *	visible.
+	 *	
+	 *	@param object  The display object to verify.
+	 *	
+	 *	@return        True if all parents and object are visible. Otherwise,
+	 *                 returns false.
+	 */
+	static public function isVisible(object:DisplayObject):Boolean
+	{
+		// If we have no display object, return false
+		if(object == null) {
+			return false;
+		}
+		
+		// Iterate up the parent hierarchy looking for invisible parents
+		while(object != null) {
+			// If we find an invisible parent, return false.
+			if(!object.visible) {
+				return false;
+			}
+			
+			object = object.parent;
+		}
+		
+		// If no parents were invisible, return true.
+		return true;
 	}
 
 

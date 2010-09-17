@@ -7,6 +7,7 @@ import org.flexunit.async.Async;
 import org.fluint.uiImpersonation.UIImpersonator;
 
 import spark.components.Button;
+import spark.components.TextInput;
 import mx.controls.DataGrid;
 import mx.core.FlexGlobals;
 import mx.events.FlexEvent;
@@ -54,7 +55,7 @@ public class UITest
 	//-----------------------------
 
 	[Test]
-	public function findSingleComponent():void
+	public function shouldFindSingleComponentById():void
 	{
 		var components:Array = UI.findAll(Button, sandbox, {id:"button1"});
 		Assert.assertEquals(1, components.length);
@@ -62,7 +63,7 @@ public class UITest
 	}
 
 	[Test]
-	public function findMultipleComponents():void
+	public function shouldFindMultipleComponents():void
 	{
 		var components:Array = UI.findAll(Button, sandbox);
 		Assert.assertEquals(2, components.length);
@@ -71,14 +72,22 @@ public class UITest
 	}
 
 	[Test]
-	public function findNoComponents():void
+	public function shouldFindOnlyVisibleTextInputs():void
+	{
+		var components:Array = UI.findAll(TextInput, sandbox, {id:'textInput'});
+		Assert.assertEquals(1, components.length);
+		Assert.assertEquals(sandbox.tab0.textInput, components[0]);
+	}
+
+	[Test]
+	public function shouldFindNoComponentsIfNoneMatch():void
 	{
 		var components:Array = UI.findAll(DataGrid, sandbox);
 		Assert.assertEquals(0, components.length);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function findWithMissingClassName():void
+	public function shouldErrorWhenNoClassNameIsProvided():void
 	{
 		UI.findAll(null, sandbox);
 	}
