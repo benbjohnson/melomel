@@ -88,6 +88,7 @@ public class BridgeTest
 		Assert.assertTrue(bridge.getParser("set") is SetPropertyCommandParser);
 		Assert.assertTrue(bridge.getParser("invoke") is InvokeMethodCommandParser);
 		Assert.assertTrue(bridge.getParser("create") is CreateObjectCommandParser);
+		Assert.assertTrue(bridge.getParser("invoke-function") is InvokeFunctionCommandParser);
 	}
 
 
