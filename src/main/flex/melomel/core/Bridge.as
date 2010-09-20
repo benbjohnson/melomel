@@ -19,6 +19,8 @@ import melomel.commands.parsers.GetPropertyCommandParser;
 import melomel.commands.parsers.SetPropertyCommandParser;
 import melomel.commands.parsers.InvokeMethodCommandParser;
 import melomel.commands.parsers.CreateObjectCommandParser;
+import melomel.commands.parsers.InvokeFunctionCommandParser;
+
 
 import flash.events.DataEvent;
 import flash.events.Event;
@@ -60,6 +62,7 @@ public class Bridge extends EventDispatcher
 		setParser("get", new GetPropertyCommandParser(objectProxyManager));
 		setParser("set", new SetPropertyCommandParser(objectProxyManager));
 		setParser("invoke", new InvokeMethodCommandParser(objectProxyManager));
+		setParser("invoke-function", new InvokeFunctionCommandParser(objectProxyManager));
 		setParser("create", new CreateObjectCommandParser());
 		
 		// Setup standard formatter
