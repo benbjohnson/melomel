@@ -9,5 +9,6 @@ public class ParsersSuite
 	public var t2:SetPropertyCommandParserTest;
 	public var t3:InvokeMethodCommandParserTest;
 	public var t4:CreateObjectCommandParserTest;
+	public var t5:InvokeFunctionCommandParserTest;
 }
 }
