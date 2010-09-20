@@ -15,5 +15,6 @@ public class CommandsSuite
 	public var t2:SetPropertyCommandTest;
 	public var t3:InvokeMethodCommandTest;
 	public var t4:CreateObjectCommandTest;
+	public var t5:InvokeFunctionCommandTest;
 }
 }
