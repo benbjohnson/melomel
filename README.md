@@ -132,6 +132,23 @@ The format for this command is:
 This example method invocation would return this message:
 
 	<return value="foobar" dataType="string"/>
+	
+### Invoke Function
+
+This command invokes a package level function and passes zero or more arguments.
+The format of this command is:
+	
+	<invoke-function name="flash.utils.getQualifiedClassName">
+	  <args>
+	    <arg value="foo" dataType="string"/>
+	  </args>
+	</set>
+
+This example method invocation would return this message:
+
+		<return value="String" dataType="string"/>
+
+
 
 ### Return Values
 
