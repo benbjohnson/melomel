@@ -4,7 +4,9 @@ Melomel -- An External ActionScript Interface
 ## Overview
 
 Melomel is an API for accessing ActionScript objects in the Flash virtual
-machine through external languages.
+machine through external languages. This is especially useful for
+integrating Flash into a full stack functional testing solution such
+as [Cucumber](http://cukes.info) or [RSpec](http://rspec.info).
 
 Please visit the [http://melomel.info](http://melomel.info) for full
 documentation.
