@@ -1,7 +1,7 @@
-melomel -- An External ActionScript Interface
+Melomel -- An External ActionScript Interface
 =============================================
 
-## OVERVIEW
+## Overview
 
 Melomel is an API for accessing ActionScript objects in the Flash virtual
 machine through external languages.
@@ -10,7 +10,7 @@ Please visit the [http://melomel.info](http://melomel.info) for full
 documentation.
 
 
-## CONTRIBUTE
+## Contribute
 
 If you want to get involved, please see the
 [GitHub Issues](http://github.com/benbjohnson/melomel/issues) page for a
