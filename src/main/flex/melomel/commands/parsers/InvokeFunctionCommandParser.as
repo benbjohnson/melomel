@@ -67,8 +67,9 @@ public class InvokeFunctionCommandParser  extends ObjectProxyCommandParser
 		}
 
 		// Extract data from message
-		var action:String     = message.localName();
-		var functionName:String    = message.@name;
+		var action:String       = message.localName();
+		var functionName:String = message.@name;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "invoke-function") {
@@ -80,14 +81,13 @@ public class InvokeFunctionCommandParser  extends ObjectProxyCommandParser
 		}
 
 		// Extract arguments
-		var methodArgs:Array = [];
+		var functionArgs:Array = [];
 		for each(var argXml:XML in message.args.arg) {
-			methodArgs.push(parseMessageArgument(argXml));
+			functionArgs.push(parseMessageArgument(argXml));
 		}
 		
 		// Return command
-		return new InvokeFunctionCommand(functionName, methodArgs);
+		return new InvokeFunctionCommand(functionName, functionArgs, throwable);
 	}
-	
 }
 }

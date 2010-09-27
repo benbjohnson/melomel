@@ -25,7 +25,7 @@
 				core.addListener(new UIListener(uiListener));
 				
 				var suite:Object = MelomelSuite;
-				suite = CommandsSuite;
+				//suite = CommandsSuite;
 				//suite = CoreSuite;
 				core.run(suite);
 			}

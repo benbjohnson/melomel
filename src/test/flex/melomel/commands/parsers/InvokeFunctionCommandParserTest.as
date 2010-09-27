@@ -48,15 +48,23 @@ public class InvokeFunctionCommandParserTest
 	[Test]
 	public function parseWithFunctionAndArgs():void
 	{
-		// Assign actual proxy id to the message
 		var message:XML = <invoke-function name="foo"><args><arg value="John"/><arg value="12" dataType="int"/></args></invoke-function>;
 
 		// Parse message
 		command = parser.parse(message) as InvokeFunctionCommand;
 		Assert.assertEquals(command.functionName, "foo");
-		Assert.assertEquals(command.methodArgs.length, 2);
-		Assert.assertEquals(command.methodArgs[0], "John");
-		Assert.assertEquals(command.methodArgs[1], 12);
+		Assert.assertEquals(command.functionArgs.length, 2);
+		Assert.assertEquals(command.functionArgs[0], "John");
+		Assert.assertEquals(command.functionArgs[1], 12);
+		Assert.assertTrue(command.throwable);
+	}
+
+	[Test]
+	public function parseNonThrowable():void
+	{
+		var message:XML = <invoke-function name="foo" throwable="false"><args><arg value="John"/><arg value="12" dataType="int"/></args></invoke-function>;
+		command = parser.parse(message) as InvokeFunctionCommand;
+		Assert.assertFalse(command.throwable);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
