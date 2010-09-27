@@ -43,7 +43,15 @@ public class GetPropertyCommandTest
 	{
 		command.object = {foo:"bar"};
 		command.property = "foo";
-		Assert.assertEquals(command.execute(), "bar");
+		Assert.assertEquals("bar", command.execute());
+	}
+
+	[Test]
+	public function shouldPassThroughToMethod():void
+	{
+		command.object = new TestClass();
+		command.property = "foo";
+		Assert.assertEquals("bar", command.execute());
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
@@ -60,4 +68,9 @@ public class GetPropertyCommandTest
 		command.execute();
 	}
 }
+}
+
+class TestClass
+{
+	public function foo():String {return "bar"}
 }

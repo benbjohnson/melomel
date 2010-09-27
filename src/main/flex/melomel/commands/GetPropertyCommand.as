@@ -11,6 +11,7 @@
  */
 package melomel.commands
 {
+import melomel.core.Type;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
@@ -81,8 +82,21 @@ public class GetPropertyCommand implements ICommand
 			throw new IllegalOperationError("Property name cannot be null or blank.");
 		}
 
-		// Return value
-		return object[property];
+		// Try to access as property first.
+		if(Type.hasProperty(object, property, Type.READ)) {
+			return object[property];
+		}
+		// Otherwise try a zero-arg method.
+		else if(Type.hasMethod(object, property) &&
+		        Type.getMethodParameterCount(object, property) == 0)
+		{
+			return object[property]();
+		}
+		// Finally, if nothing works then act like we're trying to access a
+		// property so we throw the appropriate error.
+		else {
+			return object[property];
+		}
 	}
 }
 }

@@ -11,6 +11,17 @@ public class Type
 {
 	//-------------------------------------------------------------------------
 	//
+	//  Static constants
+	//
+	//-------------------------------------------------------------------------
+
+	public static const READ:int        = 1;
+
+	public static const WRITE:int       = 2;
+
+
+	//-------------------------------------------------------------------------
+	//
 	//  Static properties
 	//
 	//-------------------------------------------------------------------------
@@ -32,6 +43,10 @@ public class Type
 	//
 	//-------------------------------------------------------------------------
 
+	//---------------------------------
+	//	Type Descriptors
+	//---------------------------------
+
 	/**
 	 *	Retrieves an xml descriptor of a class.
 	 */
@@ -51,6 +66,10 @@ public class Type
 	}
 
 
+	//---------------------------------
+	//	Class Inspection
+	//---------------------------------
+
 	/**
 	 *	Checks if an object is dynamic.
 	 *	
@@ -62,6 +81,136 @@ public class Type
 	{
 		var descriptor:XML = Type.describeType(obj);
 		return (descriptor && descriptor.@isDynamic == "true");
+	}
+
+
+	//---------------------------------
+	//	Property Inspection
+	//---------------------------------
+
+	/**
+	 *	Checks if a property exists on an object.
+	 *	
+	 *	@param obj       The object.
+	 *	@param propName  The property name.
+	 *	
+	 *	@return          A flag stating if the property exists.
+	 */
+	static public function hasProperty(obj:Object, propName:String,
+									   flags:uint=0):Boolean
+	{
+		// Return false for null objects.
+		if(obj == null) {
+			return false;
+		}
+		// If this is a dynamic object, perform a simple check
+		else if(isDynamic(obj)) {
+			return obj.propertyIsEnumerable(propName);
+		}
+		
+		// Retrieve descriptor and find property
+		var descriptor:XML = Type.describeType(obj);
+		var property:XML;
+		
+		// Search accessors first
+		for each(var accessor:XML in descriptor.accessor) {
+			if(accessor.@name == propName) {
+				property = accessor;
+				break;
+			}
+		}
+
+		// If not found, try variables
+		if(!property) {
+			for each(var variable:XML in descriptor.variable) {
+				if(variable.@name == propName) {
+					property = variable;
+					break;
+				}
+			}
+		}
+		
+		// If found, check for flags
+		if(property) {
+			// Check access types
+			if(flags && flags & Type.READ && property.@access == "writeonly") {
+				return false;
+			}
+			else if(flags && flags & Type.WRITE && property.@access == "readonly") {
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		// If no property found, just return false.
+		else {
+			return false;
+		}
+	}
+
+
+	//---------------------------------
+	//	Method Inspection
+	//---------------------------------
+
+	/**
+	 *	Checks if a method exists on an object.
+	 *	
+	 *	@param obj         The object.
+	 *	@param methodName  The method name.
+	 *	
+	 *	@return          A flag stating if the method exists.
+	 */
+	static public function hasMethod(obj:Object, methodName:String):Boolean
+	{
+		// Return false for null objects.
+		if(obj == null) {
+			return false;
+		}
+		
+		// Retrieve descriptor and find property
+		var descriptor:XML = Type.describeType(obj);
+		
+		// Search methods
+		for each(var method:XML in descriptor.method) {
+			if(method.@name == methodName) {
+				return true;
+			}
+		}
+		
+		// If not found by now, it doesn't exist.
+		return false;
+	}
+
+	/**
+	 *	Retrieves the number of parameters passed to a method.
+	 *	
+	 *	@param obj         The object.
+	 *	@param methodName  The method name.
+	 *	
+	 *	@return            The number of parameters needed to call the method.
+	 */
+	static public function getMethodParameterCount(obj:Object,
+												   methodName:String):uint
+	{
+		// Return false for null objects.
+		if(obj == null) {
+			return 0;
+		}
+		
+		// Retrieve descriptor and find property
+		var descriptor:XML = Type.describeType(obj);
+		
+		// Search methods
+		for each(var method:XML in descriptor.method) {
+			if(method.@name == methodName) {
+				return method.parameter.length();
+			}
+		}
+		
+		// If no method found, return zero
+		return 0;
 	}
 }
 }

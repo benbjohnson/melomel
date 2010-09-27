@@ -15,13 +15,19 @@
 			import org.flexunit.runner.FlexUnitCore;
 
 			import melomel.MelomelSuite;
+			import melomel.commands.CommandsSuite;
+			import melomel.core.CoreSuite;
 
 			public function onCreationComplete(event:Event):void
 			{
 				var core:FlexUnitCore = new FlexUnitCore();
 				core.addListener(new CIListener());
 				core.addListener(new UIListener(uiListener));
-				core.run(MelomelSuite);
+				
+				var suite:Object = MelomelSuite;
+				suite = CommandsSuite;
+				//suite = CoreSuite;
+				core.run(suite);
 			}
 		]]>
 	</mx:Script>
