@@ -24,7 +24,7 @@ import flash.utils.getDefinitionByName;
  *	<p>The CREATE command has the following format:</p>
  *	
  *	<pre>
- *	&lt;create class="<i>class name</i>"/&gt;
+ *	&lt;create class="<i>class name</i>" throwable="<i>true|false</i>"/&gt;
  *	</pre>
  *	
  *	@see melomel.commands.CreateObjectCommand
@@ -64,6 +64,7 @@ public class CreateObjectCommandParser implements ICommandParser
 		// Extract data from message
 		var action:String    = message.localName();
 		var className:String = message['@class'];
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "create") {
@@ -80,11 +81,13 @@ public class CreateObjectCommandParser implements ICommandParser
 			clazz = getDefinitionByName(className) as Class;
 		}
 		catch(e:Error) {
-			throw new IllegalOperationError("Cannot find class: " + className);
+			if(throwable) {
+				throw new IllegalOperationError("Cannot find class: " + className);
+			}
 		}
 
 		// Return command
-		return new CreateObjectCommand(clazz);
+		return new CreateObjectCommand(clazz, throwable);
 	}
 }
 }

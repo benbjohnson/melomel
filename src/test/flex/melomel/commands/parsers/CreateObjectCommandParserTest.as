@@ -71,5 +71,20 @@ public class CreateObjectCommandParserTest
 	{
 		parser.parse(<create/>);
 	}
+
+	[Test(expects="flash.errors.IllegalOperationError")]
+	public function shouldThrowErrorIfInvalidClassAndThrowable():void
+	{
+		var message:XML = <create class="no.such.class"/>;
+		command = parser.parse(message) as CreateObjectCommand;
+	}
+
+	[Test]
+	public function shouldReturnNullIfInvalidClassAndNotThrowable():void
+	{
+		var message:XML = <create class="no.such.class" throwable="false"/>;
+		command = parser.parse(message) as CreateObjectCommand;
+		Assert.assertNull(command.clazz);
+	}
 }
 }
