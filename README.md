@@ -146,7 +146,7 @@ The format of this command is:
 
 This example method invocation would return this message:
 
-		<return value="String" dataType="string"/>
+	<return value="String" dataType="string"/>
 
 
 
