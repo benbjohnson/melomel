@@ -26,7 +26,7 @@ import flash.errors.IllegalOperationError;
  *	<p>The SET command has the following format:</p>
  *	
  *	<pre>
- *	&lt;set object="<i>proxy_id</i>" property=""&gt;
+ *	&lt;set object="<i>proxy_id</i>" property="" throwable="true|false"&gt;
  *	  &lt;arg value="" dataType=""/&gt;
  *	&lt;/set&gt;
  *	</pre>
@@ -75,6 +75,7 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		var proxyId:Number    = parseInt(message.@object);
 		var object:Object     = manager.getItemById(proxyId);
 		var property:String   = message.@property;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "set") {
@@ -97,7 +98,7 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		var value:Object = parseMessageArgument(message.arg[0]);
 		
 		// Return command
-		return new SetPropertyCommand(object, property, value);
+		return new SetPropertyCommand(object, property, value, throwable);
 	}
 }
 }

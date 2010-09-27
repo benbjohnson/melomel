@@ -26,7 +26,7 @@ import flash.errors.IllegalOperationError;
  *	<p>The GET command has the following format:</p>
  *	
  *	<pre>
- *	&lt;get object="<i>proxy_id</i>" property=""/&gt;
+ *	&lt;get object="<i>proxy_id</i>" property="" throwable="true|false"/&gt;
  *	</pre>
  *	
  *	@see melomel.commands.GetPropertyCommand

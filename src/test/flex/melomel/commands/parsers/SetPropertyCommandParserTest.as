@@ -65,6 +65,16 @@ public class SetPropertyCommandParserTest
 		Assert.assertEquals(command.object, object);
 		Assert.assertEquals(command.property, "foo");
 		Assert.assertEquals(command.value, "bar");
+		Assert.assertTrue(command.throwable);
+	}
+
+	[Test]
+	public function parseNonThrowable():void
+	{
+		var message:XML = <set property="foo" throwable="false"><arg value="bar"/></set>;
+		message.@object = proxy.id;
+		command = parser.parse(message) as SetPropertyCommand;
+		Assert.assertFalse(command.throwable);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]

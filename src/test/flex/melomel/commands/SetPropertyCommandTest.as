@@ -40,17 +40,17 @@ public class SetPropertyCommandTest
 	//-----------------------------
 
 	[Test]
-	public function execute():void
+	public function shouldSetAndReturnValue():void
 	{
 		command.object = object;
 		command.property = "foo";
 		command.value    = "baz";
-		command.execute();
-		Assert.assertEquals(object.foo, "baz");
+		Assert.assertEquals("baz", command.execute());
+		Assert.assertEquals("baz", object.foo);
 	}
 
 	[Test]
-	public function executeWithNullValue():void
+	public function shouldReturnNullIfSetNull():void
 	{
 		command.object = object;
 		command.property = "foo";
@@ -59,8 +59,28 @@ public class SetPropertyCommandTest
 		Assert.assertNull(object.foo);
 	}
 
+	[Test(expects="ReferenceError")]
+	public function shouldThrowErrorIfSettingMissingPropertyAndThrowable():void
+	{
+		command.object = new TestClass();
+		command.property = "baz";
+		command.value = "xxx";
+		command.throwable = true;
+		command.execute();
+	}
+
+	[Test]
+	public function shouldNotThrowErrorIfSettingMissingPropertyIfNonThrowable():void
+	{
+		command.object = new TestClass();
+		command.property = "baz";
+		command.value = "xxx";
+		command.throwable = false;
+		Assert.assertNull(command.execute());
+	}
+
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutObject():void
+	public function shouldThrowErrorIfMissingObject():void
 	{
 		command.property = "foo";
 		command.value    = "baz";
@@ -68,11 +88,16 @@ public class SetPropertyCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutProperty():void
+	public function shouldThrowErrorIfMissingPropertyName():void
 	{
 		command.object = object;
 		command.value = "baz";
 		command.execute();
 	}
 }
+}
+
+class TestClass
+{
+	public var foo:String = "bar";
 }
