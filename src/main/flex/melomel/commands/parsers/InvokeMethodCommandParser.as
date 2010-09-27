@@ -72,6 +72,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 		var proxyId:Number    = parseInt(message.@object);
 		var object:Object     = manager.getItemById(proxyId);
 		var methodName:String = message.@method;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "invoke") {
@@ -97,7 +98,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 		}
 		
 		// Return command
-		return new InvokeMethodCommand(object, methodName, methodArgs);
+		return new InvokeMethodCommand(object, methodName, methodArgs, throwable);
 	}
 }
 }

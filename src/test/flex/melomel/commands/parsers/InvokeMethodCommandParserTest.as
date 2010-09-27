@@ -67,6 +67,16 @@ public class InvokeMethodCommandParserTest
 		Assert.assertEquals(command.methodArgs.length, 2);
 		Assert.assertEquals(command.methodArgs[0], "John");
 		Assert.assertEquals(command.methodArgs[1], 12);
+		Assert.assertTrue(command.throwable);
+	}
+
+	[Test]
+	public function parseNonThrowable():void
+	{
+		var message:XML = <invoke method="foo" throwable="false"><args><arg value="John"/><arg value="12" dataType="int"/></args></invoke>;
+		message.@object = proxy.id;
+		command = parser.parse(message) as InvokeMethodCommand;
+		Assert.assertFalse(command.throwable);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]

@@ -50,6 +50,26 @@ public class InvokeMethodCommandTest
 		Assert.assertEquals("Hello John Smith", command.execute());
 	}
 
+	[Test(expects="TypeError")]
+	public function shouldThrowErrorIfMissingMethodAndThrowable():void
+	{
+		command.object = object;
+		command.methodName = "baz";
+		command.methodArgs = [];
+		command.throwable = true;
+		command.execute();
+	}
+
+	[Test]
+	public function shouldNotThrowErrorIfMissingMethodAndNotThrowable():void
+	{
+		command.object = object;
+		command.methodName = "baz";
+		command.methodArgs = [];
+		command.throwable = false;
+		Assert.assertNull(command.execute());
+	}
+
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function executeWithoutObject():void
 	{
@@ -74,4 +94,9 @@ public class InvokeMethodCommandTest
 		command.execute();
 	}
 }
+}
+
+class TestClass
+{
+	public function foo():String {return "bar"}
 }
