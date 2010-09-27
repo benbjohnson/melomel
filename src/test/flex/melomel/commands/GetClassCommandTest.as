@@ -56,6 +56,7 @@ public class GetClassCommandTest
 	public function shouldThrowErrorIfMissingClassAndThrowable():void
 	{
 		command.name = "does.not.Exist";
+		command.throwable = true;
 		command.execute();
 	}
 
@@ -63,6 +64,7 @@ public class GetClassCommandTest
 	public function shouldReturnNullIfMissingClassAndNonThrowable():void
 	{
 		command.name = "does.not.Exist";
+		command.throwable = false;
 		Assert.assertNull(command.execute());
 	}
 }

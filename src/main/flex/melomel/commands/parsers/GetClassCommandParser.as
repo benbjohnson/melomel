@@ -23,7 +23,7 @@ import flash.errors.IllegalOperationError;
  *	<p>The GET_CLASS command has the following format:</p>
  *	
  *	<pre>
- *	&lt;get-class name="<i>class name</i>"/&gt;
+ *	&lt;get-class name="<i>class name</i>" throwable="<i>true|false</i>"/&gt;
  *	</pre>
  *	
  *	@see melomel.commands.GetClassCommand
@@ -61,8 +61,9 @@ public class GetClassCommandParser implements ICommandParser
 		}
 
 		// Extract data from message
-		var action:String = message.localName();
-		var name:String   = message.@name;
+		var action:String     = message.localName();
+		var name:String       = message.@name;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "get-class") {
@@ -74,7 +75,7 @@ public class GetClassCommandParser implements ICommandParser
 		}
 		
 		// Return command
-		return new GetClassCommand(name);
+		return new GetClassCommand(name, throwable);
 	}
 }
 }

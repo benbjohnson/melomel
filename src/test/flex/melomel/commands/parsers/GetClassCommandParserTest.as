@@ -45,12 +45,20 @@ public class GetClassCommandParserTest
 	[Test]
 	public function parseWithName():void
 	{
-		// Assign actual proxy id to the message
 		var message:XML = <get-class name="flash.display.Stage"/>;
 
 		// Parse message
 		command = parser.parse(message) as GetClassCommand;
 		Assert.assertEquals(command.name, "flash.display.Stage");
+		Assert.assertTrue(command.throwable);
+	}
+
+	[Test]
+	public function parseNonThrowable():void
+	{
+		var message:XML = <get-class name="flash.display.Stage" throwable="false"/>;
+		command = parser.parse(message) as GetClassCommand;
+		Assert.assertFalse(command.throwable);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
