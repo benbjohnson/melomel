@@ -70,6 +70,7 @@ public class GetPropertyCommandParser extends ObjectProxyCommandParser
 		var proxyId:Number    = parseInt(message.@object);
 		var object:Object     = manager.getItemById(proxyId);
 		var property:String   = message.@property;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "get") {
@@ -89,7 +90,7 @@ public class GetPropertyCommandParser extends ObjectProxyCommandParser
 		}
 		
 		// Return command
-		return new GetPropertyCommand(object, property);
+		return new GetPropertyCommand(object, property, throwable);
 	}
 }
 }

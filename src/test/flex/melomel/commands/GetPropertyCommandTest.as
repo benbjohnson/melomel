@@ -67,6 +67,24 @@ public class GetPropertyCommandTest
 		command.object = {foo:"bar"};
 		command.execute();
 	}
+
+	[Test(expects="ReferenceError")]
+	public function shouldThrowErrorOnMissingProperty():void
+	{
+		command.object = new TestClass();
+		command.property = "baz";
+		command.throwable = true;
+		command.execute();
+	}
+
+	[Test]
+	public function shouldNotThrowErrorOnMissingProperty():void
+	{
+		command.object = new TestClass();
+		command.property = "baz";
+		command.throwable = false;
+		command.execute();
+	}
 }
 }
 

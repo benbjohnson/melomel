@@ -33,13 +33,17 @@ public class GetPropertyCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param object    The object to retrieve from.
-	 *	@param property  The name of the property to retrieve.
+	 *	@param object     The object to retrieve from.
+	 *	@param property   The name of the property to retrieve.
+	 *	@param throwable  A flag stating if missing property errors are thrown.
 	 */
-	public function GetPropertyCommand(object:Object=null, property:String=null)
+	public function GetPropertyCommand(object:Object=null,
+									   property:String=null,
+									   throwable:Boolean=true)
 	{
-		this.object   = object;
-		this.property = property;
+		this.object    = object;
+		this.property  = property;
+		this.throwable = throwable;
 	}
 	
 
@@ -58,6 +62,12 @@ public class GetPropertyCommand implements ICommand
 	 *	The name of the property to retrieve.
 	 */
 	public var property:String;
+
+	/**
+	 *	A flag stating if the command will throw an error for missing
+	 *	properties.
+	 */
+	public var throwable:Boolean;
 
 
 	//--------------------------------------------------------------------------
@@ -95,7 +105,14 @@ public class GetPropertyCommand implements ICommand
 		// Finally, if nothing works then act like we're trying to access a
 		// property so we throw the appropriate error.
 		else {
-			return object[property];
+			// If this method throws errors, attempt the accessor.
+			if(throwable) {
+				return object[property];
+			}
+			// Otherwise just silently return null.
+			else {
+				return null;
+			}
 		}
 	}
 }

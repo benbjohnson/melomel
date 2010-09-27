@@ -64,6 +64,19 @@ public class GetPropertyCommandParserTest
 		command = parser.parse(message) as GetPropertyCommand;
 		Assert.assertEquals(object, command.object);
 		Assert.assertEquals("name", command.property);
+		Assert.assertTrue(command.throwable);
+	}
+
+	[Test]
+	public function parseNonThrowable():void
+	{
+		// Assign actual proxy id to the message
+		var message:XML = <get property="name" throwable="false"/>;
+		message.@object = proxy.id;
+
+		// Parse message
+		command = parser.parse(message) as GetPropertyCommand;
+		Assert.assertFalse(command.throwable);
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
