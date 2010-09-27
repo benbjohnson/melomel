@@ -82,7 +82,12 @@ public class GetPropertyCommand implements ICommand
 		}
 
 		// Return value
-		return object[property];
+		try {
+		    return object[property];
+		} catch (e:Error) {
+		}
+		return null;
+		
 	}
 }
 }
