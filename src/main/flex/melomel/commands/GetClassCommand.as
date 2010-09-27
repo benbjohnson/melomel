@@ -33,11 +33,13 @@ public class GetClassCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param name  The qualified class name.
+	 *	@param name       The qualified class name.
+	 *	@param throwable  A flag stating if missing property errors are thrown.
 	 */
-	public function GetClassCommand(name:String=null)
+	public function GetClassCommand(name:String=null, throwable:Boolean=true)
 	{
-		this.name = name;
+		this.name      = name;
+		this.throwable = throwable;
 	}
 	
 
@@ -51,6 +53,12 @@ public class GetClassCommand implements ICommand
 	 *	The qualified class name.
 	 */
 	public var name:String;
+
+	/**
+	 *	A flag stating if the command will throw an error if the class doesn't
+	 *	exist.
+	 */
+	public var throwable:Boolean;
 
 
 	//--------------------------------------------------------------------------
@@ -77,7 +85,12 @@ public class GetClassCommand implements ICommand
 			clazz = getDefinitionByName(name) as Class;
 		}
 		catch(e:Error) {
-			throw new IllegalOperationError("Cannot find class: " + name);
+			if(throwable) {
+				throw new IllegalOperationError("Cannot find class: " + name);
+			}
+			else {
+				return null;
+			}
 		}
 
 		// Return class

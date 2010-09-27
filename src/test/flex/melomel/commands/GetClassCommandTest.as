@@ -53,10 +53,17 @@ public class GetClassCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithInvalidClass():void
+	public function shouldThrowErrorIfMissingClassAndThrowable():void
 	{
 		command.name = "does.not.Exist";
 		command.execute();
+	}
+
+	[Test]
+	public function shouldReturnNullIfMissingClassAndNonThrowable():void
+	{
+		command.name = "does.not.Exist";
+		Assert.assertNull(command.execute());
 	}
 }
 }
