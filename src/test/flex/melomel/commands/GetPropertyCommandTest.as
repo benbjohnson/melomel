@@ -45,6 +45,14 @@ public class GetPropertyCommandTest
 		command.property = "foo";
 		Assert.assertEquals(command.execute(), "bar");
 	}
+	
+	[Test]
+	public function executeForUndefinedProperty():void
+	{
+		command.object = {foo:"bar"};
+		command.property = "fee";
+		Assert.assertEquals(command.execute(), null);
+	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
 	public function executeWithoutObject():void
