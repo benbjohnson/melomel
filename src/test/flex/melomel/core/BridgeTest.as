@@ -191,5 +191,27 @@ public class BridgeTest
 		}, false, 100);
 		socket.receive('<create class="melomel.core.BridgeTest"/>');
 	}
+
+	[Test(async)]
+	public function shouldReceiveError():void
+	{
+		// Connect and wait on send event
+		bridge.connect();
+		socket = (bridge as MockBridge).getSocket() as MockXMLSocket;
+		Async.proceedOnEvent(this, socket, "send");
+
+		// Check send for correct data and send data to bridge
+		socket.addEventListener("send", function(event:DataEvent):void{
+			var response:XML = new XML(event.data);
+			var object:Object = bridge.objectProxyManager.getItemById(parseInt(response.@proxyId));
+			Assert.assertEquals("error", response.localName().toString());
+			Assert.assertEquals("0", response.@errorId);
+			Assert.assertEquals("Cannot find class: no.such.class", response.@message);
+			Assert.assertEquals("Error", response.@name);
+			Assert.assertTrue(response.stackTrace.toString().length > 0);
+			Assert.assertTrue(object is Error);
+		}, false, 100);
+		socket.receive('<create class="no.such.class"/>');
+	}
 }
 }

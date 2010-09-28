@@ -14,17 +14,25 @@ package melomel.commands.formatters
 import melomel.core.ObjectProxy;
 import melomel.core.ObjectProxyManager;
 
-import flash.events.EventDispatcher;
 import flash.errors.IllegalOperationError;
 
 /**
  *	This class formats objects into XML messages in the following format:
  *
  *	<pre>
- *	&lt;return value="" dataType=""/&gt;
+ *	&lt;error
+ *	  proxyId=""
+ *	  errorId=""
+ *	  message=""
+ *	  name=""
+ *	&gt;
+ *	  &lt;stackTrace&gt;
+ *      <i>stack trace if available</i>
+ *	  &lt;/stackTrace&gt;
+ *	&lt;/error&gt;
  *	</pre>
  */
-public class ObjectFormatter
+public class ErrorFormatter
 {
 	//--------------------------------------------------------------------------
 	//
@@ -35,7 +43,7 @@ public class ObjectFormatter
 	/**
 	 *	Constructor.
 	 */
-	public function ObjectFormatter(manager:ObjectProxyManager)
+	public function ErrorFormatter(manager:ObjectProxyManager)
 	{
 		// Throw an error if proxy manager is missing
 		if(!manager) {
@@ -51,6 +59,16 @@ public class ObjectFormatter
 	//	Properties
 	//
 	//--------------------------------------------------------------------------
+
+	//---------------------------------
+	//	Settings
+	//---------------------------------
+
+	/**
+	 *	A flag stating whether the stack trace should be returned.
+	 */
+	public var stackTraceEnabled:Boolean = true;
+	
 
 	//---------------------------------
 	//	Object proxy manager
@@ -69,42 +87,30 @@ public class ObjectFormatter
 	//--------------------------------------------------------------------------
 
 	/**
-	 *	Formats a value as a return object.
+	 *	Formats a value as an error message.
 	 *	
-	 *	@param value  The value to format.
+	 *	@param error  The error to format.
 	 *	
-	 *	@return       An XML formatted return message.
+	 *	@return       An XML formatted error message.
 	 */
-	public function format(value:Object):XML
+	public function format(error:Error):XML
 	{
-		var message:XML = new XML('<return/>');
+		var proxy:ObjectProxy = manager.addItem(error);
+
+		// Create error message
+		var message:XML = new XML('<error/>');
+		message.@proxyId = proxy.id;
+		message.@errorId = error.errorID;
+		message.@message = error.message;
+		message.@name = error.name;
 		
-		// Format null
-		if(value == null) {
-			message.@dataType = "null";
+		// Append stack trace, if available and enabled.
+		if(stackTraceEnabled && error.getStackTrace()) {
+			var child:XML = <stackTrace/>;
+			child.appendChild(error.getStackTrace());
+			message.appendChild(child);
 		}
-		// Format objects
-		else if(typeof(value) == "object") {
-			var proxy:ObjectProxy = manager.addItem(value);
-			message.@value    = proxy.id;
-			message.@dataType = "object";
-		}
-		// Format numbers
-		else if(typeof(value) == "number") {
-			message.@value    = value;
-			message.@dataType = (Math.floor(value as Number) == value ? "int" : "float");
-		}
-		// Format boolean values
-		else if(typeof(value) == "boolean") {
-			message.@value    = value;
-			message.@dataType = "boolean";
-		}
-		// Format everything else as a string
-		else {
-			message.@value    = value;
-			message.@dataType = "string";
-		}
-		
+
 		return message;
 	}
 }
