@@ -86,7 +86,7 @@ public class UITest
 		Assert.assertEquals(0, components.length);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldErrorWhenNoClassNameIsProvided():void
 	{
 		UI.findAll(null, sandbox);
@@ -152,14 +152,14 @@ public class UITest
 		UI.click(sandbox.button1);
 	}
 
-	[Test(async,expects="flash.errors.IllegalOperationError")]
+	[Test(async,expects="melomel.errors.MelomelError")]
 	public function clickWhenDisabledThrowsError():void
 	{
 		sandbox.button1.enabled = false;
 		UI.click(sandbox.button1);
 	}
 
-	[Test(async,expects="flash.errors.IllegalOperationError")]
+	[Test(async,expects="melomel.errors.MelomelError")]
 	public function clickWhenMouseDisabledThrowsError():void
 	{
 		sandbox.button1.mouseEnabled = false;
@@ -175,7 +175,7 @@ public class UITest
 		UI.doubleClick(sandbox.button1);
 	}
 
-	[Test(async,expects="flash.errors.IllegalOperationError")]
+	[Test(async,expects="melomel.errors.MelomelError")]
 	public function clickWhenDoubleClickDisabledThrowsError():void
 	{
 		sandbox.button1.doubleClickEnabled = false;

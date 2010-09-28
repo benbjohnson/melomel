@@ -15,7 +15,7 @@ import melomel.commands.GetClassCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class parses XML messages to build GetClass commands.
@@ -57,7 +57,7 @@ public class GetClassCommandParser implements ICommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 
 		// Extract data from message
@@ -67,11 +67,11 @@ public class GetClassCommandParser implements ICommandParser
 		
 		// Verify message action
 		if(action != "get-class") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify name exists
 		else if(name == null || name.length == 0) {
-			throw new IllegalOperationError("Class name is required in message");
+			throw new MelomelError("Class name is required in message");
 		}
 		
 		// Return command

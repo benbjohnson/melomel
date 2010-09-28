@@ -17,7 +17,7 @@ import melomel.commands.InvokeFunctionCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class parses XML messages to build InvokeFunction commands.
@@ -63,7 +63,7 @@ public class InvokeFunctionCommandParser  extends ObjectProxyCommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 
 		// Extract data from message
@@ -73,11 +73,11 @@ public class InvokeFunctionCommandParser  extends ObjectProxyCommandParser
 		
 		// Verify message action
 		if(action != "invoke-function") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify function name exists
 		else if(functionName == null || functionName.length == 0) {
-			throw new IllegalOperationError("Function name is required in message");
+			throw new MelomelError("Function name is required in message");
 		}
 
 		// Extract arguments

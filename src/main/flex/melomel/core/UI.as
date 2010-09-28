@@ -17,7 +17,7 @@ import flash.display.InteractiveObject;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.text.TextField;
 import flash.utils.getDefinitionByName;
 
@@ -83,11 +83,11 @@ public class UI
 		
 		// Verify class is not null
 		if(!clazz) {
-			throw new IllegalOperationError("A class name or reference is required");
+			throw new MelomelError("A class name or reference is required");
 		}
 		// Find root if not passed in
 		if(!root) {
-			throw new IllegalOperationError("The root display object is required");
+			throw new MelomelError("The root display object is required");
 		}
 		
 		// Convert class name to class reference, if necessary
@@ -96,7 +96,7 @@ public class UI
 				clazz = getDefinitionByName(clazz as String);
 			}
 			catch(e:Error) {
-				throw new IllegalOperationError("Cannot find class: " + clazz);
+				throw new MelomelError("Cannot find class: " + clazz);
 			}
 		}
 		
@@ -212,14 +212,14 @@ public class UI
 		
 		// If we are using a Flex component, make sure it is enabled
 		if(typeOf(component, "mx.core.UIComponent") && !component.enabled) {
-			throw new IllegalOperationError("Flex component is disabled");
+			throw new MelomelError("Flex component is disabled");
 		}
 		
 		// Validate mouse-specific actions
 		if(event is MouseEvent) {
 			// Component must be mouse enabled
 			if(!component.mouseEnabled) {
-				throw new IllegalOperationError("Mouse events are not enabled on component");
+				throw new MelomelError("Mouse events are not enabled on component");
 			}
 
 			// Center the click
@@ -238,11 +238,11 @@ public class UI
 			
 			// Verify that a key is specified to be pressed
 			if(char == null || char == "") {
-				throw new IllegalOperationError("A keyboard key is required");
+				throw new MelomelError("A keyboard key is required");
 			}
 			// Verify that only one character is specified
 			if(char is String && char.length > 1) {
-				throw new IllegalOperationError("Only one keyboard key can be pressed at a time");
+				throw new MelomelError("Only one keyboard key can be pressed at a time");
 			}
 			
 			// Convert to keyCode & charCode
@@ -265,7 +265,7 @@ public class UI
 				properties.keyCode  = char;
 			}
 			else {
-				throw new IllegalOperationError("Keyboard character must be a string or a key code value");
+				throw new MelomelError("Keyboard character must be a string or a key code value");
 			}
 			
 			// Find UITextField inside text components
@@ -312,7 +312,7 @@ public class UI
 	{
 		// Component must be mouse enabled
 		if(!component.doubleClickEnabled) {
-			throw new IllegalOperationError("Double clicking is not enabled on component");
+			throw new MelomelError("Double clicking is not enabled on component");
 		}
 
 		click(component, properties);
@@ -454,7 +454,7 @@ public class UI
 	 */
 	public function UI()
 	{
-		throw new IllegalOperationError("Cannot instantiate the UI class")
+		throw new MelomelError("Cannot instantiate the UI class")
 	}
 }
 }

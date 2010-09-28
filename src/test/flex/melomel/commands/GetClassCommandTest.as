@@ -45,14 +45,14 @@ public class GetClassCommandTest
 		Assert.assertEquals(Stage, command.execute());
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function executeWithoutName():void
 	{
 		command.name = null;
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorIfMissingClassAndThrowable():void
 	{
 		command.name = "does.not.Exist";

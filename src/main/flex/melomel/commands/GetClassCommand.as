@@ -14,7 +14,7 @@ package melomel.commands
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.utils.getDefinitionByName;
 
 /**
@@ -76,7 +76,7 @@ public class GetClassCommand implements ICommand
 	{
 		// Verify class name exists
 		if(name == null || name == "") {
-			throw new IllegalOperationError("Class name cannot be null or blank.");
+			throw new MelomelError("Class name cannot be null or blank.");
 		}
 
 		// Find class by name
@@ -86,7 +86,7 @@ public class GetClassCommand implements ICommand
 		}
 		catch(e:Error) {
 			if(throwable) {
-				throw new IllegalOperationError("Cannot find class: " + name);
+				throw new MelomelError("Cannot find class: " + name);
 			}
 			else {
 				return null;

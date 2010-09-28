@@ -14,7 +14,7 @@ package melomel.commands
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 import flash.utils.getDefinitionByName;
 
@@ -88,11 +88,11 @@ public class InvokeFunctionCommand implements ICommand
 
 		// Verify function name exists
 		if(functionName == null || functionName == "") {
-			throw new IllegalOperationError("Function name cannot be null or blank.");
+			throw new MelomelError("Function name cannot be null or blank.");
 		}
 		// Verify method arguments exist
 		if(functionArgs == null) {
-			throw new IllegalOperationError("Function arguments cannot be null.");
+			throw new MelomelError("Function arguments cannot be null.");
 		}
 
 		// Invoke method
@@ -102,7 +102,7 @@ public class InvokeFunctionCommand implements ICommand
 		}
 		catch(e:Error) {
 			if(throwable) {
-				throw new IllegalOperationError("Cannot find function: " + functionName);
+				throw new MelomelError("Cannot find function: " + functionName);
 			}
 		}
 		

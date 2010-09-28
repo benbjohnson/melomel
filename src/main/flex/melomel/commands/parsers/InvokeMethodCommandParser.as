@@ -17,7 +17,7 @@ import melomel.commands.InvokeMethodCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class parses XML messages to build InvokeMethod commands. The parser
@@ -64,7 +64,7 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 
 		// Extract data from message
@@ -76,19 +76,19 @@ public class InvokeMethodCommandParser extends ObjectProxyCommandParser
 		
 		// Verify message action
 		if(action != "invoke") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify proxy id
 		else if(isNaN(proxyId)) {
-			throw new IllegalOperationError("Missing 'object' reference in message");
+			throw new MelomelError("Missing 'object' reference in message");
 		}
 		// Verify proxy exists
 		else if(!object) {
-			throw new IllegalOperationError("Object #" + proxyId + " does not exist");
+			throw new MelomelError("Object #" + proxyId + " does not exist");
 		}
 		// Verify method name exists
 		else if(methodName == null || methodName.length == 0) {
-			throw new IllegalOperationError("Method name is required in message");
+			throw new MelomelError("Method name is required in message");
 		}
 
 		// Extract arguments

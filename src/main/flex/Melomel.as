@@ -14,7 +14,7 @@ package
 import melomel.core.Bridge;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class serves as a global singleton of the bridge. This is sufficient
@@ -93,7 +93,7 @@ public class Melomel extends EventDispatcher
 	 */
 	public function Melomel()
 	{
-		throw new IllegalOperationError("Melomel is a singleton and cannot be instantiated");
+		throw new MelomelError("Melomel is a singleton and cannot be instantiated");
 	}
 }
 }

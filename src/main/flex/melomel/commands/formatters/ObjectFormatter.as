@@ -15,7 +15,7 @@ import melomel.core.ObjectProxy;
 import melomel.core.ObjectProxyManager;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class formats objects into XML messages in the following format:
@@ -39,7 +39,7 @@ public class ObjectFormatter
 	{
 		// Throw an error if proxy manager is missing
 		if(!manager) {
-			throw new IllegalOperationError("Object proxy manager is required for formatter");
+			throw new MelomelError("Object proxy manager is required for formatter");
 		}
 		
 		this.manager = manager;

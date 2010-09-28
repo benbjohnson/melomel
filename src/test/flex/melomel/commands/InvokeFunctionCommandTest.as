@@ -45,7 +45,7 @@ public class InvokeFunctionCommandTest
 		Assert.assertEquals("String", command.execute());
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function executeWithoutObject():void
 	{
 		command.functionName = "";
@@ -53,7 +53,7 @@ public class InvokeFunctionCommandTest
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function executeWithoutFunctionName():void
 	{
 		command.functionName = "flash.utils.getQualifiedClassName";
@@ -61,14 +61,14 @@ public class InvokeFunctionCommandTest
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function executeWithoutFunctionArgs():void
 	{
 		command.functionName = "testFunc";
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorForMissingMethodIfThrowable():void
 	{
 		command.functionName = "no.such.function";

@@ -15,7 +15,7 @@ import melomel.commands.CreateObjectCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.utils.getDefinitionByName;
 
 /**
@@ -58,7 +58,7 @@ public class CreateObjectCommandParser implements ICommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 
 		// Extract data from message
@@ -68,11 +68,11 @@ public class CreateObjectCommandParser implements ICommandParser
 		
 		// Verify message action
 		if(action != "create") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify name exists
 		else if(className == null || className.length == 0) {
-			throw new IllegalOperationError("Class name is required in message");
+			throw new MelomelError("Class name is required in message");
 		}
 		
 		// Find class by name
@@ -82,7 +82,7 @@ public class CreateObjectCommandParser implements ICommandParser
 		}
 		catch(e:Error) {
 			if(throwable) {
-				throw new IllegalOperationError("Cannot find class: " + className);
+				throw new MelomelError("Cannot find class: " + className);
 			}
 		}
 

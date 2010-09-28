@@ -88,7 +88,7 @@ public class InvokeMethodCommandTest
 		Assert.assertNull(command.execute());
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorWhenMissingObject():void
 	{
 		command.methodName = "testFunc";
@@ -96,7 +96,7 @@ public class InvokeMethodCommandTest
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorWhenMissingMethodName():void
 	{
 		command.object = object;
@@ -104,7 +104,7 @@ public class InvokeMethodCommandTest
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorWhenMissingMethodArgs():void
 	{
 		command.object = object;

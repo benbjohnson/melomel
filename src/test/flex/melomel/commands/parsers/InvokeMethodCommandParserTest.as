@@ -79,13 +79,13 @@ public class InvokeMethodCommandParserTest
 		Assert.assertFalse(command.throwable);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidActionThrowsError():void
 	{
 		var message:XML = <foo property="foo"><arg value="bar"/></foo>;
@@ -93,19 +93,19 @@ public class InvokeMethodCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithNoParametersThrowsError():void
 	{
 		parser.parse(<invoke/>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingObjectThrowsError():void
 	{
 		parser.parse(<invoke property="foo"><args><arg value="bar"/></args></invoke>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingPropertyThrowsError():void
 	{
 		var message:XML = <invoke><args><arg value="foo"/></args></invoke>;
@@ -113,7 +113,7 @@ public class InvokeMethodCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidObjectProxy():void
 	{
 		parser.parse(<invoke object="100000" property="foo"><arg value="bar"/></invoke>);

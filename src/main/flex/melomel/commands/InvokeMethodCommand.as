@@ -15,7 +15,7 @@ import melomel.commands.ICommand;
 import melomel.core.Type;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action of invoking a method on an object.
@@ -92,15 +92,15 @@ public class InvokeMethodCommand implements ICommand
 	{
 		// Verify object exists
 		if(object == null) {
-			throw new IllegalOperationError("Cannot set property on a null object");
+			throw new MelomelError("Cannot set property on a null object");
 		}
 		// Verify method name exists
 		if(methodName == null || methodName == "") {
-			throw new IllegalOperationError("Method name cannot be null or blank.");
+			throw new MelomelError("Method name cannot be null or blank.");
 		}
 		// Verify method arguments exist
 		if(methodArgs == null) {
-			throw new IllegalOperationError("Method arguments cannot be null.");
+			throw new MelomelError("Method arguments cannot be null.");
 		}
 
 		// Invoke method

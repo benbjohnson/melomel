@@ -12,7 +12,7 @@
 package melomel.core
 {
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents a pointer to an object in the Flash virtual machine.
@@ -51,7 +51,7 @@ public class ObjectProxy
 	{
 		// Throw an error if we don't have an object to proxy
 		if(object == null) {
-			throw new IllegalOperationError("Object is required for object proxy");
+			throw new MelomelError("Object is required for object proxy");
 		}
 		
 		// Set identifier and link object

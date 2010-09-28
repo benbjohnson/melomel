@@ -67,26 +67,26 @@ public class InvokeFunctionCommandParserTest
 		Assert.assertFalse(command.throwable);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidActionThrowsError():void
 	{
 		var message:XML = <foo property="foo"><arg value="bar"/></foo>;
 		parser.parse(message);
 	}
 	
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingFunctionThrowsError():void
 	{
 		parser.parse(<invoke-function property="foo"><args><arg value="bar"/></args></invoke-function>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithNoParametersThrowsError():void
 	{
 		parser.parse(<invoke-function/>);

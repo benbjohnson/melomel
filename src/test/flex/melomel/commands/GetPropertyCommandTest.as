@@ -136,14 +136,14 @@ public class GetPropertyCommandTest
 		Assert.assertEquals("bar", command.execute());
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorWhenMissingObject():void
 	{
 		command.property = "foo";
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorWhenMissingProperty():void
 	{
 		command.object = {foo:"bar"};

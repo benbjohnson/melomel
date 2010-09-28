@@ -17,7 +17,7 @@ import melomel.commands.SetPropertyCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class parses XML messages to build SetProperty commands. The parser
@@ -64,10 +64,10 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 		else if(message.arg.length() == 0) {
-			throw new IllegalOperationError("Message arg is required");
+			throw new MelomelError("Message arg is required");
 		}
 
 		// Extract data from message
@@ -79,19 +79,19 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		
 		// Verify message action
 		if(action != "set") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify proxy id
 		else if(isNaN(proxyId)) {
-			throw new IllegalOperationError("Missing 'object' reference in message");
+			throw new MelomelError("Missing 'object' reference in message");
 		}
 		// Verify proxy exists
 		else if(!object) {
-			throw new IllegalOperationError("Object #" + proxyId + " does not exist");
+			throw new MelomelError("Object #" + proxyId + " does not exist");
 		}
 		// Verify property exists
 		else if(property == null || property.length == 0) {
-			throw new IllegalOperationError("Property is required in message");
+			throw new MelomelError("Property is required in message");
 		}
 
 		// Extract value argument

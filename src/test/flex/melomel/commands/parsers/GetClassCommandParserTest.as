@@ -61,20 +61,20 @@ public class GetClassCommandParserTest
 		Assert.assertFalse(command.throwable);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidAction():void
 	{
 		var message:XML = <foo name="flash.display.Stage"/>;
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithParametersThrowsError():void
 	{
 		parser.parse(<get-class/>);

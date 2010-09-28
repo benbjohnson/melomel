@@ -28,7 +28,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.net.XMLSocket;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
@@ -237,7 +237,7 @@ public class Bridge extends EventDispatcher
 		var parser:ICommandParser = getParser(action);
 		
 		if(!parser) {
-			throw new IllegalOperationError("No parser found for action: " + action);
+			throw new MelomelError("No parser found for action: " + action);
 		}
 		
 		// Parse message

@@ -14,7 +14,7 @@ package
 import melomel.core.Bridge;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class allows you to automatically start up a Melomel bridge through

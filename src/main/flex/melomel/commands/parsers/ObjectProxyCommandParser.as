@@ -16,7 +16,7 @@ import melomel.core.ObjectProxyManager;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This is the base class for parsers that use an object proxy manager.
@@ -36,7 +36,7 @@ public class ObjectProxyCommandParser
 	{
 		// Throw an error if proxy manager is missing
 		if(!manager) {
-			throw new IllegalOperationError("Object proxy manager is required for parser");
+			throw new MelomelError("Object proxy manager is required for parser");
 		}
 		
 		// Set manager
@@ -78,7 +78,7 @@ public class ObjectProxyCommandParser
 	{
 		// Verify node
 		if(!xml) {
-			throw new IllegalOperationError("Message argument xml is required");
+			throw new MelomelError("Message argument xml is required");
 		}
 
 		// Extract data from node
@@ -93,7 +93,7 @@ public class ObjectProxyCommandParser
 		else if(dataType == "object") {
 			var object:Object = manager.getItemById(parseInt(valueString));
 			if(!object) {
-				throw new IllegalOperationError("Object #" + valueString + " does not exist");
+				throw new MelomelError("Object #" + valueString + " does not exist");
 			}
 			return object;
 		}
@@ -115,7 +115,7 @@ public class ObjectProxyCommandParser
 		}
 		// Invalid data type
 		else {
-			throw new IllegalOperationError("Invalid data type: " + dataType);
+			throw new MelomelError("Invalid data type: " + dataType);
 		}
 	}
 }

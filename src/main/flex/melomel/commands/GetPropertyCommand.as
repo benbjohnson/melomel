@@ -15,7 +15,7 @@ import melomel.core.Type;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action of returning a property from an object.
@@ -85,11 +85,11 @@ public class GetPropertyCommand implements ICommand
 	{
 		// Verify object exists
 		if(object == null) {
-			throw new IllegalOperationError("Cannot retrieve property from a null object");
+			throw new MelomelError("Cannot retrieve property from a null object");
 		}
 		// Verify property exists
 		if(property == null || property == "") {
-			throw new IllegalOperationError("Property name cannot be null or blank.");
+			throw new MelomelError("Property name cannot be null or blank.");
 		}
 
 		// Try to access as property first.

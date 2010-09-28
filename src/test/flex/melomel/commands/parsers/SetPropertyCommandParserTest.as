@@ -77,13 +77,13 @@ public class SetPropertyCommandParserTest
 		Assert.assertFalse(command.throwable);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidActionThrowsError():void
 	{
 		var message:XML = <foo property="foo"><arg value="bar"/></foo>;
@@ -91,19 +91,19 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithNoParametersThrowsError():void
 	{
 		parser.parse(<set/>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingObjectThrowsError():void
 	{
 		parser.parse(<set property="foo"><arg value="bar"/></set>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingPropertyThrowsError():void
 	{
 		var message:XML = <set><arg value="foo"/></set>;
@@ -111,7 +111,7 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingValueThrowsError():void
 	{
 		var message:XML = <set property="foo"/>;
@@ -119,7 +119,7 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidObjectProxy():void
 	{
 		parser.parse(<set object="100000" property="foo"><arg value="bar"/></set>);

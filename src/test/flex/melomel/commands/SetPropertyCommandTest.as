@@ -181,7 +181,7 @@ public class SetPropertyCommandTest
 		Assert.assertNull(command.execute());
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorIfMissingObject():void
 	{
 		command.property = "foo";
@@ -189,7 +189,7 @@ public class SetPropertyCommandTest
 		command.execute();
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function shouldThrowErrorIfMissingPropertyName():void
 	{
 		command.object = object;
