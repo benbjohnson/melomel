@@ -42,12 +42,30 @@ public class InvokeMethodCommandTest
 	//-----------------------------
 
 	[Test]
-	public function execute():void
+	public function shouldExecuteDynamicMethod():void
 	{
 		command.object = object;
 		command.methodName = "testFunc";
 		command.methodArgs = ["John", "Smith"];
 		Assert.assertEquals("Hello John Smith", command.execute());
+	}
+
+	[Test]
+	public function shouldExecuteInstanceMethod():void
+	{
+		command.object = new TestClass();
+		command.methodName = "instanceMethod";
+		command.methodArgs = [];
+		Assert.assertEquals("foo", command.execute());
+	}
+
+	[Test]
+	public function shouldExecuteStaticMethod():void
+	{
+		command.object = TestClass;
+		command.methodName = "staticMethod";
+		command.methodArgs = [];
+		Assert.assertEquals("foo", command.execute());
 	}
 
 	[Test(expects="TypeError")]
@@ -71,7 +89,7 @@ public class InvokeMethodCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutObject():void
+	public function shouldThrowErrorWhenMissingObject():void
 	{
 		command.methodName = "testFunc";
 		command.methodArgs = ["John", "Smith"];
@@ -79,7 +97,7 @@ public class InvokeMethodCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutMethodName():void
+	public function shouldThrowErrorWhenMissingMethodName():void
 	{
 		command.object = object;
 		command.methodArgs = ["John", "Smith"];
@@ -87,7 +105,7 @@ public class InvokeMethodCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutMethodArgs():void
+	public function shouldThrowErrorWhenMissingMethodArgs():void
 	{
 		command.object = object;
 		command.methodName = "testFunc";
@@ -98,5 +116,6 @@ public class InvokeMethodCommandTest
 
 class TestClass
 {
-	public function foo():String {return "bar"}
+	static public function staticMethod():String {return "foo"}
+	public function instanceMethod():String {return "foo"}
 }

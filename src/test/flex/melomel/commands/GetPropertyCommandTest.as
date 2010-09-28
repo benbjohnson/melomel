@@ -39,11 +39,93 @@ public class GetPropertyCommandTest
 	//-----------------------------
 
 	[Test]
-	public function execute():void
+	public function shouldRetrieveDyamicProperty():void
 	{
 		command.object = {foo:"bar"};
 		command.property = "foo";
 		Assert.assertEquals("bar", command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveNonDyamicProperty():void
+	{
+		command.object = new TestClass();
+		command.property = "variable";
+		Assert.assertEquals("x", command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveAccessor():void
+	{
+		command.object = new TestClass();
+		command.property = "accessor";
+		Assert.assertEquals("y", command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveAccessorMutator():void
+	{
+		command.object = new TestClass();
+		command.property = "accessorMutator";
+		Assert.assertEquals("z", command.execute());
+	}
+
+	[Test(expects="ReferenceError")]
+	public function shouldThrowErrorWhenRetrievingMutator():void
+	{
+		command.object = new TestClass();
+		command.property = "mutator";
+		command.execute();
+	}
+
+	[Test]
+	public function shouldReturnNullWhenRetrievingMutatorAndNotThrowable():void
+	{
+		command.object = new TestClass();
+		command.property = "mutator";
+		command.throwable = false;
+		Assert.assertNull(command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveStaticProperty():void
+	{
+		command.object = TestClass;
+		command.property = "staticVariable";
+		Assert.assertEquals("a", command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveStaticAccessor():void
+	{
+		command.object = TestClass;
+		command.property = "staticAccessor";
+		Assert.assertEquals("b", command.execute());
+	}
+
+	[Test]
+	public function shouldRetrieveStaticAccessorMutator():void
+	{
+		command.object = TestClass;
+		command.property = "staticAccessorMutator";
+		Assert.assertEquals("c", command.execute());
+	}
+
+	[Test(expects="ReferenceError")]
+	public function shouldThrowErrorWhenRetrievingStaticMutator():void
+	{
+		command.object = new TestClass()
+		command.property = "staticMutator";
+		command.execute();
+	}
+
+	[Test]
+	public function shouldReturnNullWhenRetrievingStaticMutatorAndNotThrowable():void
+	{
+		command.object = TestClass;
+		command.property = "staticMutator";
+		command.throwable = false;
+		Assert.assertNull(command.execute());
 	}
 
 	[Test]
@@ -55,21 +137,21 @@ public class GetPropertyCommandTest
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutObject():void
+	public function shouldThrowErrorWhenMissingObject():void
 	{
 		command.property = "foo";
 		command.execute();
 	}
 
 	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithoutProperty():void
+	public function shouldThrowErrorWhenMissingProperty():void
 	{
 		command.object = {foo:"bar"};
 		command.execute();
 	}
 
 	[Test(expects="ReferenceError")]
-	public function shouldThrowErrorOnMissingProperty():void
+	public function shouldThrowErrorOnInvalidProperty():void
 	{
 		command.object = new TestClass();
 		command.property = "baz";
@@ -78,7 +160,7 @@ public class GetPropertyCommandTest
 	}
 
 	[Test]
-	public function shouldNotThrowErrorOnMissingProperty():void
+	public function shouldNotThrowErrorOnInvalidPropertyWhenNotThrowable():void
 	{
 		command.object = new TestClass();
 		command.property = "baz";
@@ -90,5 +172,17 @@ public class GetPropertyCommandTest
 
 class TestClass
 {
+	static public var staticVariable:String = "a";
+	static public function get staticAccessor():String {return "b"}
+	static public function set staticMutator(value:String):void {}
+	static public function get staticAccessorMutator():String {return "c"}
+	static public function set staticAccessorMutator(value:String):void {}
+
+	public var variable:String = "x";
+	public function get accessor():String {return "y"};
+	public function set mutator(value:String):void {};
+	public function get accessorMutator():String {return "z"};
+	public function set accessorMutator(value:String):void {};
+
 	public function foo():String {return "bar"}
 }

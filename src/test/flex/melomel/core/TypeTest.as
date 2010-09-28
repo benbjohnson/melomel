@@ -47,7 +47,7 @@ public class TypeTest
 
 
 	//---------------------------------
-	//	Properties
+	//	Properties (Instance)
 	//---------------------------------
 
 	[Test]
@@ -136,6 +136,77 @@ public class TypeTest
 
 
 	//---------------------------------
+	//	Properties (Static)
+	//---------------------------------
+
+	[Test]
+	public function shouldHaveStaticVariable():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticVariable"));
+	}
+
+	[Test]
+	public function shouldHaveStaticAccessor():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessor"));
+	}
+
+	[Test]
+	public function shouldHaveReadableStaticAccessor():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessor", Type.READ));
+	}
+
+	[Test]
+	public function shouldNotHaveWritableStaticAccessor():void
+	{
+		Assert.assertFalse(Type.hasProperty(TestClass, "staticAccessor", Type.WRITE));
+	}
+
+	[Test]
+	public function shouldHaveStaticMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticMutator"));
+	}
+
+	[Test]
+	public function shouldHaveWriteableStaticMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticMutator", Type.WRITE));
+	}
+
+	[Test]
+	public function shouldNotHaveReadableStaticMutator():void
+	{
+		Assert.assertFalse(Type.hasProperty(TestClass, "staticMutator", Type.READ));
+	}
+
+	[Test]
+	public function shouldHaveStaticAccessorMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessorMutator"));
+	}
+
+	[Test]
+	public function shouldHaveReadableStaticAccessorMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessorMutator", Type.READ));
+	}
+
+	[Test]
+	public function shouldHaveWritableStaticAccessorMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessorMutator", Type.WRITE));
+	}
+
+	[Test]
+	public function shouldHaveReadWriteStaticAccessorMutator():void
+	{
+		Assert.assertTrue(Type.hasProperty(TestClass, "staticAccessorMutator", Type.READ | Type.WRITE));
+	}
+
+
+	//---------------------------------
 	//	Methods
 	//---------------------------------
 
@@ -169,6 +240,31 @@ public class TypeTest
 
 class TestClass
 {
+	//-------------------------------------------------------------------------
+	//
+	//	Static Properties
+	//
+	//-------------------------------------------------------------------------
+
+	static public var staticVariable:String;
+
+	static public function get staticAccessor():String {return ""}
+	static public function set staticMutator(value:String):void {}
+
+	static public function get staticAccessorMutator():String {return ""}
+	static public function set staticAccessorMutator(value:String):void {}
+
+
+	static public function staticZeroArgMethod():void {}
+	static public function staticMultiArgMethod(a:String, b:String):void {}
+
+
+	//-------------------------------------------------------------------------
+	//
+	//	Properties
+	//
+	//-------------------------------------------------------------------------
+
 	public var publicVariable:String;
 	private var privateVariable:String;
 

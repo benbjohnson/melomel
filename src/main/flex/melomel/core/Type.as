@@ -104,7 +104,7 @@ public class Type
 			return false;
 		}
 		// If this is a dynamic object, perform a simple check
-		else if(isDynamic(obj)) {
+		else if(isDynamic(obj) && !(obj is Class)) {
 			return obj.propertyIsEnumerable(propName);
 		}
 		
