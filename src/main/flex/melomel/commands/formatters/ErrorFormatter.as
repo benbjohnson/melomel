@@ -26,9 +26,9 @@ import melomel.errors.MelomelError;
  *	  message=""
  *	  name=""
  *	&gt;
- *	  &lt;stackTrace&gt;
+ *	  &lt;stack-trace&gt;
  *      <i>stack trace if available</i>
- *	  &lt;/stackTrace&gt;
+ *	  &lt;/stack-trace&gt;
  *	&lt;/error&gt;
  *	</pre>
  */
@@ -106,7 +106,7 @@ public class ErrorFormatter
 		
 		// Append stack trace, if available and enabled.
 		if(stackTraceEnabled && error.getStackTrace()) {
-			var child:XML = <stackTrace/>;
+			var child:XML = <stack-trace/>;
 			child.appendChild(error.getStackTrace());
 			message.appendChild(child);
 		}
