@@ -46,6 +46,7 @@ public class SetPropertyCommandTest
 		command.property = "foo";
 		command.value = "baz";
 		Assert.assertEquals("baz", command.execute());
+		Assert.assertEquals("baz", command.object.foo);
 	}
 
 	[Test]

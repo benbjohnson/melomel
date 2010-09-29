@@ -107,7 +107,14 @@ public class GetPropertyCommand implements ICommand
 		else {
 			// If this method throws errors, attempt the accessor.
 			if(throwable) {
-				return object[property];
+				// Flash doesn't throw an error on missing properties of a
+				// Class because classes are dynamic. Throw our own.
+				if(object is Class) {
+					throw new ReferenceError("No such static property on " + object + ": " + property);
+				}
+				else {
+					return object[property];
+				}
 			}
 			// Otherwise just silently return null.
 			else {

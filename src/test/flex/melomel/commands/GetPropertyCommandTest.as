@@ -159,6 +159,16 @@ public class GetPropertyCommandTest
 		command.execute();
 	}
 
+	[Test(expects="ReferenceError")]
+	public function shouldThrowErrorOnInvalidStaticProperty():void
+	{
+		trace("---");
+		command.object = TestClass;
+		command.property = "noSuchProperty";
+		command.throwable = true;
+		command.execute();
+	}
+
 	[Test]
 	public function shouldNotThrowErrorOnInvalidPropertyWhenNotThrowable():void
 	{

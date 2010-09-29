@@ -128,12 +128,6 @@ public class TypeTest
 		Assert.assertTrue(Type.hasProperty({name:"Bob"}, "name"));
 	}
 
-	[Test]
-	public function shouldNotHaveMissingDynamicProperty():void
-	{
-		Assert.assertFalse(Type.hasProperty({name:"Bob"}, "foo"));
-	}
-
 
 	//---------------------------------
 	//	Properties (Static)
@@ -143,6 +137,12 @@ public class TypeTest
 	public function shouldHaveStaticVariable():void
 	{
 		Assert.assertTrue(Type.hasProperty(TestClass, "staticVariable"));
+	}
+
+	[Test]
+	public function shouldNotHaveInvalidStaticVariable():void
+	{
+		Assert.assertFalse(Type.hasProperty(TestClass, "noSuchProperty"));
 	}
 
 	[Test]

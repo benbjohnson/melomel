@@ -73,7 +73,7 @@ public class ErrorFormatterTest
 		}
 		formatter.stackTraceEnabled = true;
 		message = formatter.format(error);
-		Assert.assertTrue(message.stackTrace.toString().length > 0);
+		Assert.assertTrue(message['stack-trace'].toString().length > 0);
 	}
 }
 }

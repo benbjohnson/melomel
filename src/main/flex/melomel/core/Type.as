@@ -103,9 +103,9 @@ public class Type
 		if(obj == null) {
 			return false;
 		}
-		// If this is a dynamic object, perform a simple check
+		// Return true for all dynamic objects
 		else if(isDynamic(obj) && !(obj is Class)) {
-			return obj.propertyIsEnumerable(propName);
+			return true;
 		}
 		
 		// Retrieve descriptor and find property

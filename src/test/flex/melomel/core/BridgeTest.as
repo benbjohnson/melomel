@@ -208,7 +208,7 @@ public class BridgeTest
 			Assert.assertEquals("0", response.@errorId);
 			Assert.assertEquals("Cannot find class: no.such.class", response.@message);
 			Assert.assertEquals("Error", response.@name);
-			Assert.assertTrue(response.stackTrace.toString().length > 0);
+			Assert.assertTrue(response['stack-trace'].toString().length > 0);
 			Assert.assertTrue(object is Error);
 		}, false, 100);
 		socket.receive('<create class="no.such.class"/>');
