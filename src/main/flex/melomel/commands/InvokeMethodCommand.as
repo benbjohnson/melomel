@@ -12,9 +12,10 @@
 package melomel.commands
 {
 import melomel.commands.ICommand;
+import melomel.core.Type;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action of invoking a method on an object.
@@ -35,14 +36,17 @@ public class InvokeMethodCommand implements ICommand
 	 *	@param object      The object to retrieve from.
 	 *	@param methodName  The name of the method to invoke.
 	 *	@param methodArgs  A list of arguments to pass to the method.
+	 *	@param throwable  A flag stating if missing property errors are thrown.
 	 */
 	public function InvokeMethodCommand(object:Object=null,
 										methodName:String=null,
-										methodArgs:Array=null)
+										methodArgs:Array=null,
+										throwable:Boolean=true)
 	{
 		this.object     = object;
 		this.methodName = methodName;
 		this.methodArgs = methodArgs;
+		this.throwable  = throwable;
 	}
 	
 
@@ -60,13 +64,17 @@ public class InvokeMethodCommand implements ICommand
 	/**
 	 *	The name of the method to invoke on the object.
 	 */
-	public var methodName:Object;
+	public var methodName:String;
 
 	/**
 	 *	A list of arguments to pass to the method.
 	 */
 	public var methodArgs:Array;
 
+	/**
+	 *	A flag stating if the command will throw an error for missing method.
+	 */
+	public var throwable:Boolean;
 
 	//--------------------------------------------------------------------------
 	//
@@ -84,19 +92,24 @@ public class InvokeMethodCommand implements ICommand
 	{
 		// Verify object exists
 		if(object == null) {
-			throw new IllegalOperationError("Cannot set property on a null object");
+			throw new MelomelError("Cannot set property on a null object");
 		}
 		// Verify method name exists
 		if(methodName == null || methodName == "") {
-			throw new IllegalOperationError("Method name cannot be null or blank.");
+			throw new MelomelError("Method name cannot be null or blank.");
 		}
 		// Verify method arguments exist
 		if(methodArgs == null) {
-			throw new IllegalOperationError("Method arguments cannot be null.");
+			throw new MelomelError("Method arguments cannot be null.");
 		}
 
 		// Invoke method
-		return object[methodName].apply(null, methodArgs);
+		if(Type.hasMethod(object, methodName) || throwable) {
+			return object[methodName].apply(null, methodArgs);
+		}
+		else {
+			return null;
+		}
 	}
 }
 }

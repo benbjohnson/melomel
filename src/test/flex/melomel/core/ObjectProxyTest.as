@@ -32,7 +32,7 @@ public class ObjectProxyTest
 		Assert.assertEquals(proxy.object, object);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function constructWithoutObjectThrowsError():void
 	{
 		proxy = new ObjectProxy(null);

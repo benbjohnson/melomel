@@ -17,7 +17,7 @@ import melomel.commands.SetPropertyCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class parses XML messages to build SetProperty commands. The parser
@@ -26,7 +26,7 @@ import flash.errors.IllegalOperationError;
  *	<p>The SET command has the following format:</p>
  *	
  *	<pre>
- *	&lt;set object="<i>proxy_id</i>" property=""&gt;
+ *	&lt;set object="<i>proxy_id</i>" property="" throwable="true|false"&gt;
  *	  &lt;arg value="" dataType=""/&gt;
  *	&lt;/set&gt;
  *	</pre>
@@ -64,10 +64,10 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 		else if(message.arg.length() == 0) {
-			throw new IllegalOperationError("Message arg is required");
+			throw new MelomelError("Message arg is required");
 		}
 
 		// Extract data from message
@@ -75,29 +75,30 @@ public class SetPropertyCommandParser extends ObjectProxyCommandParser
 		var proxyId:Number    = parseInt(message.@object);
 		var object:Object     = manager.getItemById(proxyId);
 		var property:String   = message.@property;
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "set") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify proxy id
 		else if(isNaN(proxyId)) {
-			throw new IllegalOperationError("Missing 'object' reference in message");
+			throw new MelomelError("Missing 'object' reference in message");
 		}
 		// Verify proxy exists
 		else if(!object) {
-			throw new IllegalOperationError("Object #" + proxyId + " does not exist");
+			throw new MelomelError("Object #" + proxyId + " does not exist");
 		}
 		// Verify property exists
 		else if(property == null || property.length == 0) {
-			throw new IllegalOperationError("Property is required in message");
+			throw new MelomelError("Property is required in message");
 		}
 
 		// Extract value argument
 		var value:Object = parseMessageArgument(message.arg[0]);
 		
 		// Return command
-		return new SetPropertyCommand(object, property, value);
+		return new SetPropertyCommand(object, property, value, throwable);
 	}
 }
 }

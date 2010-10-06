@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="melomel" basedir=".">
+<project name="melomel" basedir="." default="build">
 	<!-- Properties -->
 	<property environment="env"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
     <property name="compc.jar" value="${FLEX_HOME}/lib/compc.jar" />
     <property name="mxmlc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
+    <property name="asdoc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
+
+    <property name="version.major" value="0"/>
 
 	<property name="doc.dir" value="${basedir}/doc"/>
 	<property name="etc.dir" value="${basedir}/etc"/>
@@ -15,9 +18,9 @@
 	<taskdef resource="flexTasks.tasks" classpath="${etc.dir}/flexTasks.jar" />
 	<taskdef resource="flexUnitTasks.tasks" classpath="${etc.dir}/flexUnitTasks-4.0.0.jar" />
 
-	<!-- Target: Compile -->
+	<!-- Target: Build SWC -->
 	<!-- compc -load-config+=src/main/resources/melomel-config.xml -->
-	<target name="compile">
+	<target name="build">
 		<java jar="${compc.jar}" fork="true" failonerror="true">
 			<jvmarg value="-Xmx1024M"/>
 			<jvmarg value="-Xms512M"/>
@@ -26,23 +29,20 @@
 		</java>
 	</target>
 	
-	<!-- Target: Bridge -->
+	<!-- Target: Test -->
 	<!-- mxmlc -load-config+=src/test/resources/BridgeRunner-config.xml src/test/flex/BridgeRunner.mxml -->
-	<target name="bridge-compile">
+	<!-- mxmlc +configname=air -load-config+=src/test/resources/TestRunner-config.xml src/test/flex/TestRunner.mxml -->
+	<target name="test-build">
 		<mkdir dir="${target.dir}/test"/>
 
+		<!-- Bridge -->
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
 			<arg value="-load-config+=${src.dir}/test/resources/BridgeRunner-config.xml"/>
 			<arg value="${src.dir}/test/flex/BridgeRunner.mxml"/>
 		</java>
-	</target>
-	
-	<!-- Target: Test -->
-	<!-- mxmlc +configname=air -load-config+=src/test/resources/TestRunner-config.xml src/test/flex/TestRunner.mxml -->
-	<target name="test-compile">
-		<mkdir dir="${target.dir}/test"/>
 
+		<!-- TestRunner -->
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<jvmarg value="-Xmx1024M"/>
 			<jvmarg value="-Xms512M"/>
@@ -77,7 +77,7 @@
 		<copy file="${src.dir}/test/resources/TestRunner-app.xml" tofile="${target.dir}/test/TestRunner-app.xml" overwrite="true"/>
 	</target>
 
-	<target name="test" depends="deps,test-compile,test-run,test-report"/>
+	<target name="test" depends="deps,test-build,test-run,test-report"/>
 
 
 	<!-- Target: Documentation -->

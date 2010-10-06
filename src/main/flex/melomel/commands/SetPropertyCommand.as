@@ -12,9 +12,10 @@
 package melomel.commands
 {
 import melomel.commands.ICommand;
+import melomel.core.Type;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action of setting a property on an object to a
@@ -33,17 +34,20 @@ public class SetPropertyCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param object    The object to retrieve from.
-	 *	@param property  The name of the property to retrieve.
-	 *	@param value     The value to set the property to.
+	 *	@param object     The object to retrieve from.
+	 *	@param property   The name of the property to retrieve.
+	 *	@param value      The value to set the property to.
+	 *	@param throwable  A flag stating if missing property errors are thrown.
 	 */
 	public function SetPropertyCommand(object:Object=null,
 									   property:String=null,
-									   value:Object=null)
+									   value:Object=null,
+									   throwable:Boolean=true)
 	{
-		this.object   = object;
-		this.property = property;
-		this.value    = value;
+		this.object    = object;
+		this.property  = property;
+		this.value     = value;
+		this.throwable = throwable;
 	}
 	
 
@@ -68,6 +72,13 @@ public class SetPropertyCommand implements ICommand
 	 */
 	public var value:Object;
 
+	/**
+	 *	A flag stating if the command will throw an error for missing
+	 *	properties.
+	 */
+	public var throwable:Boolean;
+
+
 
 	//--------------------------------------------------------------------------
 	//
@@ -85,18 +96,25 @@ public class SetPropertyCommand implements ICommand
 	{
 		// Verify object exists
 		if(object == null) {
-			throw new IllegalOperationError("Cannot set property on a null object");
+			throw new MelomelError("Cannot set property on a null object");
 		}
 		// Verify property exists
 		if(property == null || property == "") {
-			throw new IllegalOperationError("Property name cannot be null or blank.");
+			throw new MelomelError("Property name cannot be null or blank.");
 		}
 
-		// Set value
-		object[property] = value;
+		// Set value. If property doesn't exist, set it if command is throwable
+		if(Type.hasProperty(object, property, Type.WRITE) || throwable) {
+			object[property] = value;
+		}
 		
 		// Return new property value. This could be different than 'value'.
-		return object[property];
+		if(Type.hasProperty(object, property, Type.READ)) {
+			return object[property];
+		}
+		else {
+			return null;
+		}
 	}
 }
 }

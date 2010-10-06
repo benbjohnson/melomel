@@ -14,7 +14,7 @@ package melomel.commands.parsers
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This interface defines the methods for parsing commands.

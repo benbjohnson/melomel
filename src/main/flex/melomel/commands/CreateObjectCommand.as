@@ -14,7 +14,7 @@ package melomel.commands
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action that creates an object of a given class.
@@ -32,11 +32,14 @@ public class CreateObjectCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param clazz  The class reference to instantiate from.
+	 *	@param clazz      The class reference to instantiate from.
+	 *	@param throwable  A flag stating if invalid class errors are thrown.
 	 */
-	public function CreateObjectCommand(clazz:Class=null)
+	public function CreateObjectCommand(clazz:Class=null,
+										throwable:Boolean=true)
 	{
-		this.clazz = clazz;
+		this.clazz     = clazz;
+		this.throwable = throwable;
 	}
 	
 
@@ -50,6 +53,11 @@ public class CreateObjectCommand implements ICommand
 	 *	The class to instantiate from.
 	 */
 	public var clazz:Class;
+
+	/**
+	 *	A flag stating if the command will throw an error for an invalid class.
+	 */
+	public var throwable:Boolean;
 
 
 	//--------------------------------------------------------------------------
@@ -67,7 +75,12 @@ public class CreateObjectCommand implements ICommand
 	{
 		// Verify class exists
 		if(!clazz) {
-			throw new IllegalOperationError("Class reference is required for instantiation");
+			if(throwable) {
+				throw new MelomelError("Class reference is required for instantiation");
+			}
+			else {
+				return null;
+			}
 		}
 
 		// Instantiate and return

@@ -14,7 +14,7 @@ package melomel.core
 import melomel.core.ObjectProxy;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.utils.Dictionary;
 
 /**
@@ -100,7 +100,7 @@ public class ObjectProxyManager extends EventDispatcher
 		var proxy:ObjectProxy;
 		
 		if(!object) {
-			throw new IllegalOperationError("Object is required");
+			throw new MelomelError("Object is required");
 		}
 		
 		// If object is already proxied, return existing reference

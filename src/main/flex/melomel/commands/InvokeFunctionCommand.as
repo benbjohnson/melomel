@@ -14,7 +14,7 @@ package melomel.commands
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 import flash.utils.getDefinitionByName;
 
@@ -34,16 +34,18 @@ public class InvokeFunctionCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param object      The object to retrieve from.
-	 *	@param methodName  The name of the method to invoke.
-	 *	@param methodArgs  A list of arguments to pass to the method.
+	 *	@param object        The object to retrieve from.
+	 *	@param methodName    The name of the function to invoke.
+	 *	@param functionArgs  A list of arguments to pass to the function.
+	 *	@param throwable     A flag stating if missing method errors are thrown.
 	 */
-	public function InvokeFunctionCommand(
-										functionName:String=null,
-										methodArgs:Array=null)
+	public function InvokeFunctionCommand(functionName:String=null,
+										  functionArgs:Array=null,
+										  throwable:Boolean=true)
 	{
 		this.functionName = functionName;
-		this.methodArgs = methodArgs;
+		this.functionArgs = functionArgs;
+		this.throwable    = throwable;
 	}
 	
 
@@ -59,9 +61,14 @@ public class InvokeFunctionCommand implements ICommand
 	public var functionName:String;
 
 	/**
-	 *	A list of arguments to pass to the method.
+	 *	A list of arguments to pass to the function.
 	 */
-	public var methodArgs:Array;
+	public var functionArgs:Array;
+
+	/**
+	 *	A flag stating if the command will throw an error for missing method.
+	 */
+	public var throwable:Boolean;
 
 
 	//--------------------------------------------------------------------------
@@ -81,15 +88,31 @@ public class InvokeFunctionCommand implements ICommand
 
 		// Verify function name exists
 		if(functionName == null || functionName == "") {
-			throw new IllegalOperationError("Function name cannot be null or blank.");
+			throw new MelomelError("Function name cannot be null or blank.");
 		}
 		// Verify method arguments exist
-		if(methodArgs == null) {
-			throw new IllegalOperationError("Function arguments cannot be null.");
+		if(functionArgs == null) {
+			throw new MelomelError("Function arguments cannot be null.");
 		}
 
 		// Invoke method
-		return flash.utils.getDefinitionByName(functionName).apply(null, methodArgs);
+		var func:Function;
+		try {
+			func = flash.utils.getDefinitionByName(functionName) as Function;
+		}
+		catch(e:Error) {
+			if(throwable) {
+				throw new MelomelError("Cannot find function: " + functionName);
+			}
+		}
+		
+		// Execute the function if we found it.
+		if(func != null) {
+			return func.apply(null, functionArgs);
+		}
+		else {
+			return null;
+		}
 	}
 }
 }

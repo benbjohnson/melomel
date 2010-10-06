@@ -15,7 +15,7 @@ import melomel.commands.CreateObjectCommand;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.utils.getDefinitionByName;
 
 /**
@@ -24,7 +24,7 @@ import flash.utils.getDefinitionByName;
  *	<p>The CREATE command has the following format:</p>
  *	
  *	<pre>
- *	&lt;create class="<i>class name</i>"/&gt;
+ *	&lt;create class="<i>class name</i>" throwable="<i>true|false</i>"/&gt;
  *	</pre>
  *	
  *	@see melomel.commands.CreateObjectCommand
@@ -58,20 +58,21 @@ public class CreateObjectCommandParser implements ICommandParser
 	{
 		// Verify message action
 		if(!message) {
-			throw new IllegalOperationError("Message is required for parsing");
+			throw new MelomelError("Message is required for parsing");
 		}
 
 		// Extract data from message
 		var action:String    = message.localName();
 		var className:String = message['@class'];
+		var throwable:Boolean = (message.@throwable != "false");
 		
 		// Verify message action
 		if(action != "create") {
-			throw new IllegalOperationError("Cannot parse action: '" + action + "'");
+			throw new MelomelError("Cannot parse action: '" + action + "'");
 		}
 		// Verify name exists
 		else if(className == null || className.length == 0) {
-			throw new IllegalOperationError("Class name is required in message");
+			throw new MelomelError("Class name is required in message");
 		}
 		
 		// Find class by name
@@ -80,11 +81,13 @@ public class CreateObjectCommandParser implements ICommandParser
 			clazz = getDefinitionByName(className) as Class;
 		}
 		catch(e:Error) {
-			throw new IllegalOperationError("Cannot find class: " + className);
+			if(throwable) {
+				throw new MelomelError("Cannot find class: " + className);
+			}
 		}
 
 		// Return command
-		return new CreateObjectCommand(clazz);
+		return new CreateObjectCommand(clazz, throwable);
 	}
 }
 }

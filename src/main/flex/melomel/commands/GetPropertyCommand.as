@@ -11,10 +11,11 @@
  */
 package melomel.commands
 {
+import melomel.core.Type;
 import melomel.commands.ICommand;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 
 /**
  *	This class represents an action of returning a property from an object.
@@ -32,13 +33,17 @@ public class GetPropertyCommand implements ICommand
 	/**
 	 *	Constructor.
 	 *	
-	 *	@param object    The object to retrieve from.
-	 *	@param property  The name of the property to retrieve.
+	 *	@param object     The object to retrieve from.
+	 *	@param property   The name of the property to retrieve.
+	 *	@param throwable  A flag stating if missing property errors are thrown.
 	 */
-	public function GetPropertyCommand(object:Object=null, property:String=null)
+	public function GetPropertyCommand(object:Object=null,
+									   property:String=null,
+									   throwable:Boolean=true)
 	{
-		this.object   = object;
-		this.property = property;
+		this.object    = object;
+		this.property  = property;
+		this.throwable = throwable;
 	}
 	
 
@@ -58,6 +63,12 @@ public class GetPropertyCommand implements ICommand
 	 */
 	public var property:String;
 
+	/**
+	 *	A flag stating if the command will throw an error for missing
+	 *	properties.
+	 */
+	public var throwable:Boolean;
+
 
 	//--------------------------------------------------------------------------
 	//
@@ -74,20 +85,42 @@ public class GetPropertyCommand implements ICommand
 	{
 		// Verify object exists
 		if(object == null) {
-			throw new IllegalOperationError("Cannot retrieve property from a null object");
+			throw new MelomelError("Cannot retrieve property from a null object");
 		}
 		// Verify property exists
 		if(property == null || property == "") {
-			throw new IllegalOperationError("Property name cannot be null or blank.");
+			throw new MelomelError("Property name cannot be null or blank.");
 		}
 
-		// Return value
-		try {
-		    return object[property];
-		} catch (e:Error) {
+		// Try to access as property first.
+		if(Type.hasProperty(object, property, Type.READ)) {
+			return object[property];
 		}
-		return null;
-		
+		// Otherwise try a zero-arg method.
+		else if(Type.hasMethod(object, property) &&
+		        Type.getMethodParameterCount(object, property) == 0)
+		{
+			return object[property]();
+		}
+		// Finally, if nothing works then act like we're trying to access a
+		// property so we throw the appropriate error.
+		else {
+			// If this method throws errors, attempt the accessor.
+			if(throwable) {
+				// Flash doesn't throw an error on missing properties of a
+				// Class because classes are dynamic. Throw our own.
+				if(object is Class) {
+					throw new ReferenceError("No such static property on " + object + ": " + property);
+				}
+				else {
+					return object[property];
+				}
+			}
+			// Otherwise just silently return null.
+			else {
+				return null;
+			}
+		}
 	}
 }
 }

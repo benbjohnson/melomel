@@ -41,7 +41,7 @@ public class ObjectProxyManagerTest
 		Assert.assertEquals(object, manager.getItemById(proxy.id));
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function addingNullShouldThrowError():void
 	{
 		manager.addItem(null);

@@ -12,9 +12,11 @@
 package
 {
 import melomel.core.Bridge;
+import melomel.core.Type;
+import melomel.errors.MelomelError;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
+import flash.display.Stage;
 
 /**
  *	This class serves as a global singleton of the bridge. This is sufficient
@@ -52,6 +54,19 @@ public class Melomel extends EventDispatcher
 
 
 	//---------------------------------
+	//	Stage
+	//---------------------------------
+	
+	/**
+	 *	A reference to the stage. This is initialized automatically for Flex
+	 *	applications but has to be set manually when using a Flash-only
+	 *	application.
+	 */
+	static public var stage:Stage;
+	
+
+
+	//---------------------------------
 	//	Debug
 	//---------------------------------
 	
@@ -67,6 +82,34 @@ public class Melomel extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 
+	//---------------------------------
+	//	Initialization
+	//---------------------------------
+	
+	static private var initialized:Boolean = false;
+	
+	/**
+	 *	Initializes Melomel. This only has to be done once.
+	 */
+	static public function initialize():void
+	{
+		// Only initialize once.
+		if(initialized) return;
+		
+		// Set stage property if this is a Flex app.
+		if(Type.getClass("mx.core.FlexGlobals")) {
+			stage = Type.getClass("mx.core.FlexGlobals").topLevelApplication.stage as Stage;
+		}
+		else if(Type.getClass("mx.core.Application")) {
+			stage = Type.getClass("mx.core.Application").application.stage as Stage;
+		}
+	}
+
+
+	//---------------------------------
+	//	Bridge
+	//---------------------------------
+
 	/**
 	 *	Attempts to connect the bridge to the external interface.
 	 *	
@@ -81,7 +124,6 @@ public class Melomel extends EventDispatcher
 	}
 	
 
-
 	//--------------------------------------------------------------------------
 	//
 	//	Constructor
@@ -93,7 +135,7 @@ public class Melomel extends EventDispatcher
 	 */
 	public function Melomel()
 	{
-		throw new IllegalOperationError("Melomel is a singleton and cannot be instantiated");
+		throw new MelomelError("Melomel is a singleton and cannot be instantiated");
 	}
 }
 }

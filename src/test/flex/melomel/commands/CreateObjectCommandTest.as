@@ -48,11 +48,20 @@ public class CreateObjectCommandTest
 		Assert.assertTrue(object is Point);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
-	public function executeWithMissingClass():void
+	[Test(expects="melomel.errors.MelomelError")]
+	public function shouldThrowErrorIfMissingClassAndThrowable():void
 	{
 		command.clazz = null;
+		command.throwable = true;
 		command.execute();
+	}
+
+	[Test]
+	public function shouldReturnNullIfMissingClassAndNonThrowable():void
+	{
+		command.clazz = null;
+		command.throwable = false;
+		Assert.assertNull(command.execute());
 	}
 }
 }

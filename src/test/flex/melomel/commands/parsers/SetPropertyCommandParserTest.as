@@ -65,15 +65,25 @@ public class SetPropertyCommandParserTest
 		Assert.assertEquals(command.object, object);
 		Assert.assertEquals(command.property, "foo");
 		Assert.assertEquals(command.value, "bar");
+		Assert.assertTrue(command.throwable);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test]
+	public function parseNonThrowable():void
+	{
+		var message:XML = <set property="foo" throwable="false"><arg value="bar"/></set>;
+		message.@object = proxy.id;
+		command = parser.parse(message) as SetPropertyCommand;
+		Assert.assertFalse(command.throwable);
+	}
+
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidActionThrowsError():void
 	{
 		var message:XML = <foo property="foo"><arg value="bar"/></foo>;
@@ -81,19 +91,19 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithNoParametersThrowsError():void
 	{
 		parser.parse(<set/>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingObjectThrowsError():void
 	{
 		parser.parse(<set property="foo"><arg value="bar"/></set>);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingPropertyThrowsError():void
 	{
 		var message:XML = <set><arg value="foo"/></set>;
@@ -101,7 +111,7 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithMissingValueThrowsError():void
 	{
 		var message:XML = <set property="foo"/>;
@@ -109,7 +119,7 @@ public class SetPropertyCommandParserTest
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidObjectProxy():void
 	{
 		parser.parse(<set object="100000" property="foo"><arg value="bar"/></set>);

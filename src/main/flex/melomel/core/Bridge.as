@@ -12,6 +12,7 @@
 package melomel.core
 {
 import melomel.commands.ICommand;
+import melomel.commands.formatters.ErrorFormatter;
 import melomel.commands.formatters.ObjectFormatter;
 import melomel.commands.parsers.ICommandParser;
 import melomel.commands.parsers.GetClassCommandParser;
@@ -27,7 +28,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
-import flash.errors.IllegalOperationError;
+import melomel.errors.MelomelError;
 import flash.net.XMLSocket;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
@@ -65,8 +66,9 @@ public class Bridge extends EventDispatcher
 		setParser("invoke-function", new InvokeFunctionCommandParser(objectProxyManager));
 		setParser("create", new CreateObjectCommandParser());
 		
-		// Setup standard formatter
-		formatter = new ObjectFormatter(objectProxyManager);
+		// Setup formatters
+		objectFormatter = new ObjectFormatter(objectProxyManager);
+		errorFormatter = new ErrorFormatter(objectProxyManager);
 	}
 	
 
@@ -145,7 +147,12 @@ public class Bridge extends EventDispatcher
 	/**
 	 *	The formatter to use for outgoing messages.
 	 */
-	public var formatter:ObjectFormatter;
+	public var objectFormatter:ObjectFormatter;
+
+	/**
+	 *	The formatter to use for outgoing errors.
+	 */
+	public var errorFormatter:ErrorFormatter;
 
 
 	//--------------------------------------------------------------------------
@@ -223,19 +230,42 @@ public class Bridge extends EventDispatcher
 	{
 		if(Melomel.debug) trace("recv> " + message.toXMLString());
 
+		var error:Error;
+
 		// Locate parser for message
 		var action:String = message.localName().toString();
 		var parser:ICommandParser = getParser(action);
 		
 		if(!parser) {
-			throw new IllegalOperationError("No parser found for action: " + action);
+			throw new MelomelError("No parser found for action: " + action);
 		}
 		
 		// Parse message
-		var command:ICommand = parser.parse(message);
+		var command:ICommand;
+		try {
+			command = parser.parse(message);
+		}
+		catch(e:Error) {
+			error = e;
+			send(errorFormatter.format(e));
+			return;
+		}
 		
 		// Execute command and return value
-		send(formatter.format(command.execute()));
+		var result:Object;
+		try {
+			result = command.execute();
+		}
+		catch(e:Error) {
+			error = e;
+			send(errorFormatter.format(e));
+			return;
+		}
+
+		// If no error was caught, send back the result
+		if(!error) {
+			send(objectFormatter.format(result));
+		}
 	}
 
 
@@ -282,6 +312,7 @@ public class Bridge extends EventDispatcher
 	private function socket_onConnect(event:Event):void
 	{
 		if(Melomel.debug) trace("[CONNECT]");
+		Melomel.initialize();
 		clearTimeout(connectTimeoutId);
 		connectTimeoutId = 0;
 		send(<connect/>);

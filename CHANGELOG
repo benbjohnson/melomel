@@ -1,3 +1,9 @@
+== 0.3.0 (2010-09-20)
+
+* Synced version numbers between Melomel & Melomel.rb.
+* Added 'Invoke Function' to invoke top-level functions. (Nikita Dudnik)
+
+
 == 0.1.1 (2010-06-01)
 
 * Fixed Melomel UI so that it only finds visible components now.

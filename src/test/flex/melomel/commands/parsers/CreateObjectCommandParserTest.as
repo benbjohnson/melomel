@@ -53,23 +53,38 @@ public class CreateObjectCommandParserTest
 		Assert.assertEquals(command.clazz, Point);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithoutMessageThrowsError():void
 	{
 		parser.parse(null);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithInvalidAction():void
 	{
 		var message:XML = <foo class="flash.geom.Point"/>;
 		parser.parse(message);
 	}
 
-	[Test(expects="flash.errors.IllegalOperationError")]
+	[Test(expects="melomel.errors.MelomelError")]
 	public function parseWithParametersThrowsError():void
 	{
 		parser.parse(<create/>);
+	}
+
+	[Test(expects="melomel.errors.MelomelError")]
+	public function shouldThrowErrorIfInvalidClassAndThrowable():void
+	{
+		var message:XML = <create class="no.such.class"/>;
+		command = parser.parse(message) as CreateObjectCommand;
+	}
+
+	[Test]
+	public function shouldReturnNullIfInvalidClassAndNotThrowable():void
+	{
+		var message:XML = <create class="no.such.class" throwable="false"/>;
+		command = parser.parse(message) as CreateObjectCommand;
+		Assert.assertNull(command.clazz);
 	}
 }
 }

@@ -9,19 +9,23 @@
  *
  * @author Ben Johnson
  */
-package
+package melomel.mxml
 {
 import melomel.core.Bridge;
+import melomel.errors.MelomelError;
+
+import mx.core.IMXMLObject;
+import mx.core.UIComponent;
+import mx.events.FlexEvent;
 
 import flash.events.EventDispatcher;
-import flash.errors.IllegalOperationError;
 
 /**
  *	This class allows you to automatically start up a Melomel bridge through
  *	MMXL like this:
  *	
  *	<p><pre>
- *	<m:Melomel/>
+ *	&lt;m:Melomel/&gt;
  *	</pre></p>
  */
 public class MXMLMelomel implements IMXMLObject
