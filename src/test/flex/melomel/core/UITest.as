@@ -9,8 +9,10 @@ import org.fluint.uiImpersonation.UIImpersonator;
 import spark.components.Button;
 import spark.components.TextInput;
 import mx.controls.DataGrid;
+import mx.containers.Panel;
 import mx.core.FlexGlobals;
 import mx.events.FlexEvent;
+import mx.managers.PopUpManager;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -98,16 +100,18 @@ public class UITest
 	//  Find
 	//-----------------------------
 
-	[Test]
+	[Test(timeout="1000")]
 	public function findChildComponent():void
 	{
 		var component:DisplayObject = UI.find(Button, sandbox, {label:"Click Me"});
 		Assert.assertEquals(sandbox.button1, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function findWithNoRootSpecified():void
 	{
+		Melomel.initialize();
+
 		var button:Button = new Button();
 		button.id = "testButton";
 		FlexGlobals.topLevelApplication.addChild(button);
@@ -116,25 +120,36 @@ public class UITest
 		Assert.assertEquals(button, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function findRootComponent():void
 	{
 		var component:DisplayObject = UI.find(Sandbox, sandbox);
 		Assert.assertEquals(sandbox, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function findWithClassName():void
 	{
 		var component:DisplayObject = UI.find("spark.components.Button", sandbox, {id:"button2"});
 		Assert.assertEquals(sandbox.button2, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function findWithMultipleProperties():void
 	{
 		var component:DisplayObject = UI.find(Button, sandbox, {id:"button2", label:"Click Me"});
 		Assert.assertEquals(sandbox.button2, component);
+	}
+
+	[Test(timeout="1000")]
+	public function shouldFindPopUp():void
+	{
+		var panel:Panel = new Panel();
+		panel.title = "Foo";
+		PopUpManager.addPopUp(panel, FlexGlobals.topLevelApplication as DisplayObject);
+		var component:DisplayObject = UI.find(Panel, null, {title:"Foo"});
+		PopUpManager.removePopUp(panel);
+		Assert.assertEquals(panel, component);
 	}
 
 

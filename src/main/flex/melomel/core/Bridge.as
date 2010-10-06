@@ -312,6 +312,7 @@ public class Bridge extends EventDispatcher
 	private function socket_onConnect(event:Event):void
 	{
 		if(Melomel.debug) trace("[CONNECT]");
+		Melomel.initialize();
 		clearTimeout(connectTimeoutId);
 		connectTimeoutId = 0;
 		send(<connect/>);

@@ -27,7 +27,7 @@ public class MelomelTest
 	}
 	
 	[After]
-	public function tearDow():void
+	public function tearDown():void
 	{
 		UIImpersonator.removeChild(component);
 		component = null;
