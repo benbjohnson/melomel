@@ -74,6 +74,17 @@ public class UITest
 	}
 
 	[Test]
+	public function shouldFindMultipleClasses():void
+	{
+		var components:Array = UI.findAll([Button, TextInput], sandbox);
+		Assert.assertEquals(4, components.length);
+		Assert.assertEquals(sandbox.button1, components[0]);
+		Assert.assertEquals(sandbox.textInput1, components[1]);
+		Assert.assertEquals(sandbox.button2, components[2]);
+		Assert.assertEquals(sandbox.tab0.textInput, components[3]);
+	}
+
+	[Test]
 	public function shouldFindOnlyVisibleTextInputs():void
 	{
 		var components:Array = UI.findAll(TextInput, sandbox, {id:'textInput'});

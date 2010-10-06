@@ -39,6 +39,12 @@ public class UI
 	//---------------------------------
 	
 	/**
+	 *	A running count of matched objects within findAll(). This is not thread
+	 *	safe but luckily Flash only has one thread.
+	 */
+	static private var count:uint = 0;
+	
+	/**
 	 *	Recursively searches the display hiearchy to find a display object.
 	 *	
 	 *	@param clazz       The class to match.
@@ -49,7 +55,7 @@ public class UI
 	 *	                   properties specified in the criteria.
 	 */
 	static public function findAll(clazz:Object, root:DisplayObject,
-								   properties:Object=null):Array
+								   properties:Object=null, limit:uint=0):Array
 	{
 		// Attempt to default root if not specified
 		if(!root) {
@@ -65,37 +71,70 @@ public class UI
 			throw new MelomelError("The root display object is required");
 		}
 		
+		// Convert clazz into an Array of classes.
+		if(!(clazz is Array)) {
+			clazz = [clazz];
+		}
+		
 		// Convert class name to class reference, if necessary
-		if(clazz is String) {
-			try {
-				clazz = getDefinitionByName(clazz as String);
-			}
-			catch(e:Error) {
-				throw new MelomelError("Cannot find class: " + clazz);
+		for(var i:int=0; i<clazz.length; i++) {
+			if(clazz[i] is String) {
+				try {
+					clazz[i] = getDefinitionByName(clazz[i] as String);
+				}
+				catch(e:Error) {
+					clazz.splice(i--, 1);
+				}
 			}
 		}
 		
+		// Throw error if none of the classes passed in were found.
+		if(clazz.length == 0) {
+			throw new MelomelError("Classes could not be found");
+		}
+
+		count = 0;
+		return _findAll(clazz as Array, root, properties);
+	}
+
+	static private function _findAll(classes:Array, root:DisplayObject,
+								     properties:Object, limit:uint=0):Array
+	{
 		// Match root object first
 		var objects:Array = new Array();
-
-		if(root is (clazz as Class)) {
-			var isMatch:Boolean = true;
-
-			if(properties) {
-				// Match display object on properties
-				for(var propName:String in properties) {
-					if(!root.hasOwnProperty(propName) ||
-					   root[propName] != properties[propName])
-					{
-						isMatch = false;
-						break;
+		
+		// Attempt to match all classes
+		var match:Boolean;
+		for each(var clazz:Class in classes) {
+			match = false;
+			
+			if(root is clazz) {
+				match = true;
+				
+				if(properties) {
+					// Match display object on properties
+					for(var propName:String in properties) {
+						if(!root.hasOwnProperty(propName) ||
+						   root[propName] != properties[propName])
+						{
+							match = false;
+							break;
+						}
 					}
 				}
 			}
 			
-			// If class and properties match then add to list of components
-			if(isMatch && isVisible(root)) {
-				objects.push(root);
+			if(match) {
+				break;
+			}
+		}
+
+		// If class and properties match then add to list of components
+		if(match && isVisible(root)) {
+			objects.push(root);
+			
+			if(limit > 0 && ++count >= limit) {
+				return objects;
 			}
 		}
 		
@@ -106,9 +145,14 @@ public class UI
 				var child:DisplayObject = (root as DisplayObjectContainer).getChildAt(i);
 				
 				// If matching descendants are found then append to list
-				var arr:Array = findAll(clazz, child, properties);
+				var arr:Array = _findAll(classes, child, properties);
 				if(arr.length) {
 					objects = objects.concat(arr);
+				}
+				
+				// Exit if at limit.
+				if(limit > 0 && count >= limit) {
+					break;
 				}
 			}
 		}
@@ -130,7 +174,7 @@ public class UI
 	static public function find(clazz:Object, root:DisplayObject,
 								properties:Object=null):*
 	{
-		var objects:Array = findAll(clazz, root, properties);
+		var objects:Array = findAll(clazz, root, properties, 1);
 		return objects.shift();
 	}
 
