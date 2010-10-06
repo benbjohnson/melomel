@@ -44,6 +44,51 @@ public class Type
 	//-------------------------------------------------------------------------
 
 	//---------------------------------
+	//	Class Utilities
+	//---------------------------------
+	
+	/**
+	 *	Retrieves a reference to a class by name.
+	 *	
+	 *	@param className  The name of the class.
+	 *	
+	 *	@return           A reference to the class.
+	 */
+	static public function getClass(className:String):Class
+	{
+		// Find class reference
+		var clazz:Class;
+		try {
+			clazz = getDefinitionByName(className as String) as Class;
+		}
+		catch(e:Error) {}
+		
+		return clazz;
+	}
+	
+	/**
+	 *	Checks if an object is an instance of a class. This method is unique in
+	 *	that it uses a class name instead of a class reference.
+	 *	
+	 *	@param object     The object to check the subclass of.
+	 *	@param className  The name of the class.
+	 *	
+	 *	@return           Returns true if object is a subclass of class.
+	 */
+	static public function typeOf(object:Object, className:String):Boolean
+	{
+		// Find class reference
+		var clazz:Class = getClass(className);
+		if(!clazz) {
+			return false;
+		}
+		
+		// Check instance
+		return (object is clazz);
+	}
+
+
+	//---------------------------------
 	//	Type Descriptors
 	//---------------------------------
 

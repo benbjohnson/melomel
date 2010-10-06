@@ -9,5 +9,7 @@ public class MelomelSuite
 {
 	public var s0:CoreSuite;
 	public var s1:CommandsSuite;
+
+	public var t0:MelomelTest;
 }
 }

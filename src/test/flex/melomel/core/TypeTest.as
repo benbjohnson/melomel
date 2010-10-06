@@ -1,5 +1,8 @@
 package melomel.core
 {
+import mx.core.UIComponent;
+import mx.controls.Button;
+
 import org.flexunit.Assert;
 import org.flexunit.async.Async;
 
@@ -28,6 +31,41 @@ public class TypeTest
 	//  Static methods
 	//
 	//---------------------------------------------------------------------
+
+	//---------------------------------
+	//	Class utilities
+	//---------------------------------
+
+	[Test]
+	public function shouldReturnClassReference():void
+	{
+		Assert.assertEquals(UIComponent, Type.getClass("mx.core.UIComponent"));
+	}
+
+	[Test]
+	public function shouldReturnNullForNonExistentClass():void
+	{
+		Assert.assertNull(Type.getClass("no.such.class"));
+	}
+
+	[Test]
+	public function objectShouldBeSubTypeOf():void
+	{
+		Assert.assertTrue(Type.typeOf(new Button(), "mx.core.UIComponent"));
+	}
+
+	[Test]
+	public function objectShouldBeTypeOf():void
+	{
+		Assert.assertTrue(Type.typeOf(new UIComponent(), "mx.core.UIComponent"));
+	}
+
+	[Test]
+	public function objectShouldNotBeTypeOf():void
+	{
+		Assert.assertFalse(Type.typeOf(new UIComponent(), "mx.controls.Button"));
+	}
+
 
 	//---------------------------------
 	//	Dynamic

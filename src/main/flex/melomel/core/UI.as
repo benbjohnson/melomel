@@ -11,13 +11,14 @@
  */
 package melomel.core
 {
+import melomel.errors.MelomelError;
+
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import melomel.errors.MelomelError;
 import flash.text.TextField;
 import flash.utils.getDefinitionByName;
 
@@ -27,32 +28,6 @@ import flash.utils.getDefinitionByName;
  */
 public class UI
 {
-	//--------------------------------------------------------------------------
-	//
-	//	Static properties
-	//
-	//--------------------------------------------------------------------------
-	
-	/**
-	 *	A reference to the top-level display object.
-	 */
-	static public function get topLevelApplication():DisplayObject
-	{
-		var flexGlobals:Object = getClass("mx.core.FlexGlobals");
-		var applicationClass:Object = getClass("mx.core.Application");
-		
-		if(flexGlobals) {
-			return flexGlobals.topLevelApplication as DisplayObject;
-		}
-		else if(applicationClass) {
-			return applicationClass.application;
-		}
-		else {
-			return null;
-		}
-	}
-	
-	
 	//--------------------------------------------------------------------------
 	//
 	//	Static methods
@@ -78,7 +53,7 @@ public class UI
 	{
 		// Attempt to default root if not specified
 		if(!root) {
-			root = topLevelApplication;
+			root = Melomel.stage;
 		}
 		
 		// Verify class is not null
@@ -211,7 +186,7 @@ public class UI
 		}
 		
 		// If we are using a Flex component, make sure it is enabled
-		if(typeOf(component, "mx.core.UIComponent") && !component.enabled) {
+		if(Type.typeOf(component, "mx.core.UIComponent") && !component.enabled) {
 			throw new MelomelError("Flex component is disabled");
 		}
 		
@@ -395,51 +370,6 @@ public class UI
 
 		keyDown(component, char, properties);
 		keyUp(component, char, properties);
-	}
-	
-
-	//---------------------------------
-	//	Class utility
-	//---------------------------------
-	
-	/**
-	 *	Retrieves a reference to a class by name.
-	 *	
-	 *	@param className  The name of the class.
-	 *	
-	 *	@return           A reference to the class.
-	 */
-	static private function getClass(className:String):Class
-	{
-		// Find class reference
-		var clazz:Class;
-		try {
-			clazz = getDefinitionByName(className as String) as Class;
-		}
-		catch(e:Error) {}
-		
-		return clazz;
-	}
-	
-	/**
-	 *	Checks if an object is an instance of a class. This method is unique in
-	 *	that it uses a class name instead of a class reference.
-	 *	
-	 *	@param object     The object to check the subclass of.
-	 *	@param className  The name of the class.
-	 *	
-	 *	@return           Returns true if object is a subclass of class.
-	 */
-	static private function typeOf(object:Object, className:String):Boolean
-	{
-		// Find class reference
-		var clazz:Class = getClass(className);
-		if(!clazz) {
-			return false;
-		}
-		
-		// Check instance
-		return (object is clazz);
 	}
 	
 
