@@ -179,6 +179,36 @@ public class UI
 	}
 
 	/**
+	 *	Attempts to find a component based on its position relative to a label.
+	 *	This method starts by finding the label, then going up the parent
+	 *	hierarchy and then recursively searching the parent for the first
+	 *	component matching a given class.
+	 *	
+	 *	@param clazz       The class to match.
+	 *	@param labelText   The label text to match.
+	 *	@param root        The root display object to start from.
+	 *	@param properties  A hash of property values to match.
+	 *	
+	 *	@return            The display object that is labeled by another
+	 *                     display object.
+	 */
+	static public function findLabeled(clazz:Object, labelText:String,
+									   root:DisplayObject,
+									   properties:Object=null):*
+	{
+		// First find label
+		var label:DisplayObject = find(['mx.controls.Label', 'spark.components.Label'], root, {text:labelText})
+		
+		// If found, recursively search parent for component
+		if(label && label.parent) {
+			return find(clazz, label.parent, properties);
+		}
+
+		// If no label found, return null.
+		return null;
+	}
+
+	/**
 	 *	Checks if a display object is visible and all of its parents are
 	 *	visible.
 	 *	
@@ -312,10 +342,8 @@ public class UI
 	static public function click(component:InteractiveObject,
 								 properties:Object=null):void
 	{
-		// NOTE: There is currently an error fired from ActiveWindowManager
-		//       when the MOUSE_DOWN event is fired.
-		// mouseDown(component, properties);
-		// mouseUp(component, properties);
+		mouseDown(component, properties);
+		mouseUp(component, properties);
 		
 		interact(new MouseEvent(MouseEvent.CLICK), component, properties)
 	}

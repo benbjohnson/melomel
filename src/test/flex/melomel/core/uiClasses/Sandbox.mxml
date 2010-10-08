@@ -17,6 +17,26 @@
 
 	<s:Button id="button2" label="Click Me"/>
 	
+	<!-- Halo labeled component -->
+	<s:VGroup>
+		<mx:Label text="Foo Field"/>
+		<mx:TextInput id="fooField"/>
+	</s:VGroup>
+	
+	<!-- Spark labeled component -->
+	<s:VGroup>
+		<s:Label text="Bar Field"/>
+		<s:TextInput id="barField"/>
+	</s:VGroup>
+
+	<!-- Invalid labeled component -->
+	<s:VGroup>
+		<s:VGroup>
+			<mx:Label text="Baz Field"/>
+		</s:VGroup>
+		<mx:TextInput id="bazField"/>
+	</s:VGroup>
+	
 	<mx:TabNavigator creationPolicy="all">
 		<TestTab id="tab0"/>
 		<TestTab id="tab1"/>

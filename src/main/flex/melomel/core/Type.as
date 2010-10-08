@@ -217,6 +217,11 @@ public class Type
 		// Retrieve descriptor and find property
 		var descriptor:XML = Type.describeType(obj);
 		
+		// Dynamic objects have all methods
+		if(isDynamic(obj) && !(obj is Class)) {
+			return true;
+		}
+		
 		// Search methods
 		for each(var method:XML in descriptor.method) {
 			if(method.@name == methodName) {

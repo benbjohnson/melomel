@@ -86,22 +86,24 @@ public class UITest
 	public function shouldFindMultipleClasses():void
 	{
 		var components:Array = UI.findAll([Button, TextInput], sandbox);
-		Assert.assertEquals(4, components.length);
+		Assert.assertEquals(5, components.length);
 		Assert.assertEquals(sandbox.button1, components[0]);
 		Assert.assertEquals(sandbox.textInput1, components[1]);
 		Assert.assertEquals(sandbox.button2, components[2]);
-		Assert.assertEquals(sandbox.tab0.textInput, components[3]);
+		Assert.assertEquals(sandbox.barField, components[3]);
+		Assert.assertEquals(sandbox.tab0.textInput, components[4]);
 	}
 
 	[Test]
 	public function shouldFindMultipleClassesAsStrings():void
 	{
 		var components:Array = UI.findAll(["spark.components.Button", "spark.components.TextInput"], sandbox);
-		Assert.assertEquals(4, components.length);
+		Assert.assertEquals(5, components.length);
 		Assert.assertEquals(sandbox.button1, components[0]);
 		Assert.assertEquals(sandbox.textInput1, components[1]);
 		Assert.assertEquals(sandbox.button2, components[2]);
-		Assert.assertEquals(sandbox.tab0.textInput, components[3]);
+		Assert.assertEquals(sandbox.barField, components[3]);
+		Assert.assertEquals(sandbox.tab0.textInput, components[4]);
 	}
 
 	[Test]
@@ -132,6 +134,27 @@ public class UITest
 	public function shouldErrorWhenNoClassNameIsProvided():void
 	{
 		UI.findAll(null, sandbox);
+	}
+
+	[Test]
+	public function shouldFindLabeledHaloComponent():void
+	{
+		var component:Object = UI.findLabeled("mx.controls.TextInput", "Foo Field", sandbox);
+		Assert.assertEquals(sandbox.fooField, component);
+	}
+
+	[Test]
+	public function shouldFindLabeledSparkComponent():void
+	{
+		var component:Object = UI.findLabeled("spark.components.TextInput", "Bar Field", sandbox);
+		Assert.assertEquals(sandbox.barField, component);
+	}
+
+	[Test]
+	public function shouldNotFindInvalidLabeledComponent():void
+	{
+		var component:Object = UI.findLabeled("mx.controls.TextInput", "Baz", sandbox);
+		Assert.assertNull(component);
 	}
 
 
@@ -197,6 +220,7 @@ public class UITest
 	//  Mouse Interactions
 	//-----------------------------
 
+	[Ignore]
 	[Test(async)]
 	public function clickShouldOccurInMiddleOfComponent():void
 	{
@@ -221,6 +245,7 @@ public class UITest
 		UI.click(sandbox.button1);
 	}
 
+	[Ignore]
 	[Test(async)]
 	public function doubleClick():void
 	{

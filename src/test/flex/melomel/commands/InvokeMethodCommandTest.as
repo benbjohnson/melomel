@@ -81,7 +81,7 @@ public class InvokeMethodCommandTest
 	[Test]
 	public function shouldNotThrowErrorIfMissingMethodAndNotThrowable():void
 	{
-		command.object = object;
+		command.object = new TestClass();
 		command.methodName = "baz";
 		command.methodArgs = [];
 		command.throwable = false;

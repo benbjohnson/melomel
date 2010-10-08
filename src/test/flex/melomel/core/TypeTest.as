@@ -272,6 +272,12 @@ public class TypeTest
 	{
 		Assert.assertEquals(2, Type.getMethodParameterCount(testObj, "multiArgMethod"));
 	}
+	
+	[Test]
+	public function dynamicShouldHaveMethod():void
+	{
+		Assert.assertTrue(Type.hasMethod(new Array(), "push"));
+	}
 }
 }
 
