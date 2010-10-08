@@ -8,6 +8,7 @@ import org.fluint.uiImpersonation.UIImpersonator;
 
 import spark.components.Button;
 import spark.components.TextInput;
+import mx.controls.ComboBox;
 import mx.controls.DataGrid;
 import mx.containers.Panel;
 import mx.core.FlexGlobals;
@@ -329,5 +330,21 @@ public class UITest
 		UI.keyPress(sandbox.textInput1, "A");
 	}
 	
+	
+	//-----------------------------
+	//  Data Control Interaction
+	//-----------------------------
+
+	[Test]
+	public function shouldGenerateLabelsFromHaloComboBox():void
+	{
+		var combo:ComboBox = new ComboBox();
+		combo.labelField = "label";
+		var data:Array = [{label:"foo"}, {label:"bar"}];
+		var labels:Array = UI.itemsToLabels(combo, data);
+		Assert.assertEquals(2, labels.length);
+		Assert.assertEquals("foo", labels[0]);
+		Assert.assertEquals("bar", labels[1]);
+	}
 }
 }
