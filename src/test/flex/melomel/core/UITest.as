@@ -7,7 +7,9 @@ import org.flexunit.async.Async;
 import org.fluint.uiImpersonation.UIImpersonator;
 
 import spark.components.Button;
+import spark.components.ComboBox;
 import spark.components.TextInput;
+import mx.collections.ArrayList;
 import mx.controls.ComboBox;
 import mx.controls.DataGrid;
 import mx.containers.Panel;
@@ -57,7 +59,7 @@ public class UITest
 	//  Find
 	//-----------------------------
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindSingleComponentById():void
 	{
 		var components:Array = UI.findAll(Button, sandbox, {id:"button1"});
@@ -65,7 +67,7 @@ public class UITest
 		Assert.assertEquals(sandbox.button1, components[0]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindMultipleComponents():void
 	{
 		var components:Array = UI.findAll(Button, sandbox);
@@ -74,7 +76,7 @@ public class UITest
 		Assert.assertEquals(sandbox.button2, components[1]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindMultipleComponentsAsString():void
 	{
 		var components:Array = UI.findAll("spark.components.Button", sandbox);
@@ -83,7 +85,7 @@ public class UITest
 		Assert.assertEquals(sandbox.button2, components[1]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindMultipleClasses():void
 	{
 		var components:Array = UI.findAll([Button, TextInput], sandbox);
@@ -95,7 +97,7 @@ public class UITest
 		Assert.assertEquals(sandbox.tab0.textInput, components[4]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindMultipleClassesAsStrings():void
 	{
 		var components:Array = UI.findAll(["spark.components.Button", "spark.components.TextInput"], sandbox);
@@ -107,7 +109,7 @@ public class UITest
 		Assert.assertEquals(sandbox.tab0.textInput, components[4]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindMultipleClassesAsStrings2():void
 	{
 		var components:Array = UI.findAll(["spark.components.Button", "no.such.class"], sandbox);
@@ -116,7 +118,7 @@ public class UITest
 		Assert.assertEquals(sandbox.button2, components[1]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindOnlyVisibleTextInputs():void
 	{
 		var components:Array = UI.findAll(TextInput, sandbox, {id:'textInput'});
@@ -124,7 +126,7 @@ public class UITest
 		Assert.assertEquals(sandbox.tab0.textInput, components[0]);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindNoComponentsIfNoneMatch():void
 	{
 		var components:Array = UI.findAll(DataGrid, sandbox);
@@ -137,21 +139,21 @@ public class UITest
 		UI.findAll(null, sandbox);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindLabeledHaloComponent():void
 	{
 		var component:Object = UI.findLabeled("mx.controls.TextInput", "Foo Field", sandbox);
 		Assert.assertEquals(sandbox.fooField, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldFindLabeledSparkComponent():void
 	{
 		var component:Object = UI.findLabeled("spark.components.TextInput", "Bar Field", sandbox);
 		Assert.assertEquals(sandbox.barField, component);
 	}
 
-	[Test]
+	[Test(timeout="1000")]
 	public function shouldNotFindInvalidLabeledComponent():void
 	{
 		var component:Object = UI.findLabeled("mx.controls.TextInput", "Baz", sandbox);
@@ -338,9 +340,21 @@ public class UITest
 	[Test]
 	public function shouldGenerateLabelsFromHaloComboBox():void
 	{
-		var combo:ComboBox = new ComboBox();
+		var combo:mx.controls.ComboBox = new mx.controls.ComboBox();
 		combo.labelField = "label";
 		var data:Array = [{label:"foo"}, {label:"bar"}];
+		var labels:Array = UI.itemsToLabels(combo, data);
+		Assert.assertEquals(2, labels.length);
+		Assert.assertEquals("foo", labels[0]);
+		Assert.assertEquals("bar", labels[1]);
+	}
+
+	[Test]
+	public function shouldGenerateLabelsFromSparkComboBox():void
+	{
+		var combo:spark.components.ComboBox = new spark.components.ComboBox();
+		combo.labelField = "label";
+		var data:ArrayList = new ArrayList([{label:"foo"}, {label:"bar"}]);
 		var labels:Array = UI.itemsToLabels(combo, data);
 		Assert.assertEquals(2, labels.length);
 		Assert.assertEquals("foo", labels[0]);

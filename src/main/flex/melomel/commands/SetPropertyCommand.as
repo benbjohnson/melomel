@@ -103,6 +103,15 @@ public class SetPropertyCommand implements ICommand
 			throw new MelomelError("Property name cannot be null or blank.");
 		}
 
+		// Use array accessor if we have this format: "[0]"
+		if(property.search(/^\[\d+\]$/) != -1) {
+			if(!(object is Array)) {
+				throw new MelomelError("Cannot use an array accessor on a non-Array object.");
+			}
+			var index:int = parseInt(property.slice(1, property.length-1));
+			return object[index] = value;
+		}
+		
 		// Set value. If property doesn't exist, set it if command is throwable
 		if(Type.hasProperty(object, property, Type.WRITE) || throwable) {
 			object[property] = value;
