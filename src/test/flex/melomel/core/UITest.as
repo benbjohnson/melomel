@@ -160,6 +160,13 @@ public class UITest
 		Assert.assertNull(component);
 	}
 
+	[Test(timeout="1000")]
+	public function shouldFindLabeledLabel():void
+	{
+		var component:Object = UI.findLabeled("mx.controls.Label", "First Name", sandbox);
+		Assert.assertEquals(sandbox.firstNameLabel, component);
+	}
+
 
 
 	//-----------------------------

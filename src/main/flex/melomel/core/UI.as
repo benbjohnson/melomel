@@ -201,7 +201,11 @@ public class UI
 		
 		// If found, recursively search parent for component
 		if(label && label.parent) {
-			return find(clazz, label.parent, properties);
+			var components:Array = findAll(clazz, label.parent, properties);
+			if(components.indexOf(label) != -1) {
+				components.splice(components.indexOf(label), 1);
+			}
+			return components.shift();
 		}
 
 		// If no label found, return null.

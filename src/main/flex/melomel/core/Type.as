@@ -150,7 +150,12 @@ public class Type
 		}
 		// Return true for all dynamic objects
 		else if(isDynamic(obj) && !(obj is Class)) {
-			return true;
+			try {
+				return typeof(obj[propName]) != "function";
+			}
+			catch(e:Error) {
+				return false;
+			}
 		}
 		
 		// Retrieve descriptor and find property
@@ -219,7 +224,12 @@ public class Type
 		
 		// Dynamic objects have all methods
 		if(isDynamic(obj) && !(obj is Class)) {
-			return true;
+			try {
+				return typeof(obj[methodName]) == "function";
+			}
+			catch(e:Error) {
+				return false;
+			}
 		}
 		
 		// Search methods

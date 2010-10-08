@@ -37,6 +37,12 @@
 		<mx:TextInput id="bazField"/>
 	</s:VGroup>
 	
+	<!-- Labeled label component -->
+	<s:VGroup>
+		<mx:Label text="First Name"/>
+		<mx:Label id="firstNameLabel"/>
+	</s:VGroup>
+	
 	<mx:TabNavigator creationPolicy="all">
 		<TestTab id="tab0"/>
 		<TestTab id="tab1"/>
