@@ -81,7 +81,8 @@
 
 
 	<!-- Target: Documentation -->
-	<target name="docs">
+	<target name="doc">
+		<delete dir="${target.dir}/doc"/>
 		<mkdir dir="${target.dir}/doc"/>
 
 		<!-- Find classes -->
@@ -102,6 +103,12 @@
 			<arg line="-doc-classes ${classes}"/>
 			<arg line="-window-title 'Melomel'"/>
 			<arg line="-output ${doc.dir}/flex"/>
+			<arg line="-package melomel.commands 'Contains the classes for executing Melomel actions within the Flash virtual machine.'"/>
+			<arg line="-package melomel.commands.formatters 'Contains the classes for formatting return objects and errors to the external interface.'"/>
+			<arg line="-package melomel.commands.parsers 'Contains the classes for parsing messages from the external interface.'"/>
+			<arg line="-package melomel.core 'Contains the classes responsible for managing the connection to the external interface and proxying objects.'"/>
+			<arg line="-package melomel.errors 'Contains the standard Melomel error.'"/>
+			<arg line="-package melomel.mxml 'Contains the MXML interface for automatically connecting to Melomel.'"/>
 		</exec>
 	</target>
 

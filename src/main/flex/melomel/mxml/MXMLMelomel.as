@@ -22,7 +22,7 @@ import flash.events.EventDispatcher;
 
 /**
  *	This class allows you to automatically start up a Melomel bridge through
- *	MMXL like this:
+ *	MXML like this:
  *	
  *	<p><pre>
  *	&lt;m:Melomel/&gt;
@@ -71,19 +71,9 @@ public class MXMLMelomel implements IMXMLObject
 	public function initialized(document:Object, id:String):void
 	{
 		// Wait until creation complete before we connect
-		(document as UIComponent).addEventListener(FlexEvent.CREATION_COMPLETE, document_onCreationComplete);
-	}
-
-
-	//--------------------------------------------------------------------------
-	//
-	//	Events
-	//
-	//--------------------------------------------------------------------------
-
-	private function document_onCreationComplete(event:FlexEvent):void
-	{
-		Melomel.connect(host, port);
+		document.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void{
+			Melomel.connect(host, port);
+		});
 	}
 }
 }
