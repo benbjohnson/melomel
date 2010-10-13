@@ -15,7 +15,9 @@ import melomel.core.Bridge;
 import melomel.core.Type;
 import melomel.errors.MelomelError;
 
+import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.display.DisplayObjectContainer;
 import flash.display.Stage;
 
 /**
@@ -57,15 +59,106 @@ public class Melomel extends EventDispatcher
 	//	Stage
 	//---------------------------------
 	
+	static private var _stage:Stage;
+	
 	/**
 	 *	A reference to the stage. This is initialized automatically for Flex
 	 *	applications but has to be set manually when using a Flash-only
 	 *	application.
 	 */
-	static public var stage:Stage;
+	static public function get stage():Stage
+	{
+		return _stage;
+	}
+	
+	/**
+	 *	@private
+	 */
+	static public function set stage(value:Stage):void
+	{
+		if(stage) {
+			stage.removeEventListener(Event.ENTER_FRAME, stage_onEnterFrame);
+		}
+		
+		_stage = value;
+
+		if(stage) {
+			stage.addEventListener(Event.ENTER_FRAME, stage_onEnterFrame);
+		}
+	}
 	
 
+	//---------------------------------
+	//	Frames
+	//---------------------------------
 
+	/**
+	 *	The current frame.
+	 */
+	static protected var currentFrame:uint = 0;
+
+	/**
+	 *	The frame to wait until.
+	 */
+	static protected var waitFrame:uint = 0;
+
+
+	//---------------------------------
+	//	Top level application
+	//---------------------------------
+	
+	/**
+	 *	Determines the top level application for the Flex application. This
+	 *	is determined by FlexGlobals in Flex 4 and Application.application in
+	 *	Flex 3.
+	 */
+	static public function get topLevelApplication():*
+	{
+		// Set stage property if this is a Flex app.
+		if(Type.getClass("mx.core.FlexGlobals")) {
+			return Type.getClass("mx.core.FlexGlobals").topLevelApplication;
+		}
+		else if(Type.getClass("mx.core.Application")) {
+			return Type.getClass("mx.core.Application").application;
+		}
+		
+		return null;
+	}
+
+
+
+	//---------------------------------
+	//	Busy
+	//---------------------------------
+	
+	/**
+	 *	A flag stating if the interface is currently busy. This can occur under
+	 *	the following conditions:
+	 *
+	 *	<ul>
+	 *	  <li>A specified number of frames have not passed since the last call
+	 *	      to <code>Melomel.wait()</code>.</li>
+	 *	  <li>The busy cursor is currently visible to the user.</li>
+	 *  </ul>
+	 */
+	static public function get busy():Boolean
+	{
+		// If we haven't reached the wait frame then we're busy.
+		if(waitFrame > 0 && currentFrame <= waitFrame) {
+			return true;
+		}
+
+		// If there's a busy cursor then we're busy.
+		if(hasBusyCursor()) {
+			return true;
+		}
+		
+		// If we're not busy then clear wait frame and return false.
+		waitFrame = 0;
+		return false;
+	}
+	
+	
 	//---------------------------------
 	//	Debug
 	//---------------------------------
@@ -96,13 +189,7 @@ public class Melomel extends EventDispatcher
 		// Only initialize once.
 		if(initialized) return;
 		
-		// Set stage property if this is a Flex app.
-		if(Type.getClass("mx.core.FlexGlobals")) {
-			stage = Type.getClass("mx.core.FlexGlobals").topLevelApplication.stage as Stage;
-		}
-		else if(Type.getClass("mx.core.Application")) {
-			stage = Type.getClass("mx.core.Application").application.stage as Stage;
-		}
+		stage = (topLevelApplication ? topLevelApplication.stage : null);
 	}
 
 
@@ -123,6 +210,54 @@ public class Melomel extends EventDispatcher
 		bridge.connect();
 	}
 	
+	
+	//---------------------------------
+	//	Busy state
+	//---------------------------------
+
+	/**
+	 *	Sets <code>Melomel.busy</code> to <code>true</code> for the specified
+	 *	number of frames.
+	 */
+	static public function wait(count:int=5):void
+	{
+		waitFrame = currentFrame + count;
+	}
+	
+	/**
+	 *	Determines if a busy cursor is being shown by the CursorManager.
+	 *	
+	 *	@return  True if there is a visible busy cursor. Otherwise, false.
+	 */
+	static public function hasBusyCursor():Boolean
+	{
+		if(topLevelApplication) {
+			var busyCursorClass:Class = Type.getClass("mx.skins.halo.BusyCursor");
+			var systemManager:Object = topLevelApplication.systemManager;
+
+			for(var i:int=0; i<systemManager.cursorChildren.numChildren; i++) {
+				var holder:DisplayObjectContainer = systemManager.cursorChildren.getChildAt(i) as DisplayObjectContainer;
+				if(holder.numChildren > 0 && holder.getChildAt(0) is busyCursorClass) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	
+
+	//--------------------------------------------------------------------------
+	//
+	//	Static events
+	//
+	//--------------------------------------------------------------------------
+
+	static private function stage_onEnterFrame(event:Event):void
+	{
+		currentFrame++;
+	}
+
 
 	//--------------------------------------------------------------------------
 	//
