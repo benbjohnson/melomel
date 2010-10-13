@@ -7,7 +7,7 @@
     <property name="mxmlc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
     <property name="asdoc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
 
-    <property name="version.major" value="0"/>
+    <property name="version" value="0.5.0"/>
 
 	<property name="doc.dir" value="${basedir}/doc"/>
 	<property name="etc.dir" value="${basedir}/etc"/>
@@ -21,12 +21,30 @@
 	<!-- Target: Build SWC -->
 	<!-- compc -load-config+=src/main/resources/melomel-config.xml -->
 	<target name="build">
+		<mkdir dir="${target.dir}"/>
+
 		<java jar="${compc.jar}" fork="true" failonerror="true">
 			<jvmarg value="-Xmx1024M"/>
 			<jvmarg value="-Xms512M"/>
 			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
 			<arg value="-load-config+=${src.dir}/main/resources/melomel-config.xml"/>
 		</java>
+		
+		<java jar="${compc.jar}" fork="true" failonerror="true">
+			<jvmarg value="-Xmx1024M"/>
+			<jvmarg value="-Xms512M"/>
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="-load-config+=${src.dir}/main/resources/melomel-stub-config.xml"/>
+		</java>
+		
+		<move file="${target.dir}/melomel.swc" tofile="${target.dir}/melomel-${version}.swc"/>
+		<move file="${target.dir}/melomel-stub.swc" tofile="${target.dir}/melomel-stub-${version}.swc"/>
+		
+		<zip
+			destfile="${target.dir}/melomel-${version}.zip"
+			basedir="${target.dir}"
+			includes="melomel*-${version}.swc"
+		/>
 	</target>
 	
 	<!-- Target: Test -->
@@ -82,8 +100,7 @@
 
 	<!-- Target: Documentation -->
 	<target name="doc">
-		<delete dir="${target.dir}/doc"/>
-		<mkdir dir="${target.dir}/doc"/>
+		<mkdir dir="${doc.dir}"/>
 
 		<!-- Find classes -->
 		<path id="files">
@@ -115,5 +132,6 @@
 	<!-- Target: Clean -->
 	<target name="clean">
 		<delete dir="${target.dir}"/>
+		<delete dir="${doc.dir}"/>
 	</target>
 </project>

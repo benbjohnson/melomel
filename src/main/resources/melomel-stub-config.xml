@@ -1,5 +1,5 @@
 <flex-config>
-	<output>../../../target/melomel.swc</output>
+	<output>../../../target/melomel-stub.swc</output>
 	<target-player>10.0.0</target-player>
 	<benchmark>false</benchmark>
 	<warnings>true</warnings>
@@ -10,7 +10,7 @@
 		<keep-generated-actionscript>false</keep-generated-actionscript>
 
 		<source-path>
-			<path-element>../flex</path-element>
+			<path-element>../stub</path-element>
 		</source-path>
 
 		<namespaces>
@@ -22,13 +22,14 @@
 	</compiler>
 
 	<include-classes>
-		<class>MelomelClasses</class>
+		<class>Melomel</class>
+		<class>melomel.mxml.MXMLMelomel</class>
 	</include-classes>
 
 	<metadata>
 		<creator>Ben Johnson</creator>
 		<contributor>Ben Johnson</contributor>
-		<description>A library for controlling Flash objects through an external interface.</description>
+		<description>A stubbed library for Melomel.</description>
 		<language>EN</language>
 		<title>melomel</title>
 	</metadata>
