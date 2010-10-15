@@ -13,6 +13,8 @@ package melomel.core
 {
 import melomel.errors.MelomelError;
 
+import mx.containers.TabNavigator;
+
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
@@ -30,9 +32,53 @@ public class UI
 {
 	//--------------------------------------------------------------------------
 	//
+	//	Static Properties
+	//
+	//--------------------------------------------------------------------------
+
+	/**
+	 *	A list of components whose rawChildren should be searched. This
+	 *	defaults to the FormItem and Panel but other classes can
+	 *	be added manually.
+	 */
+	static public var rawChildrenClasses:Array;
+
+	static private var containerClass:Class = Type.getClass("mx.core.Container");
+	static private var tabNavigatorClass:Class = Type.getClass("mx.containers.TabNavigator");
+	static private var tabClass:Class = Type.getClass("mx.controls.tabBarClasses.Tab");
+	
+
+	//--------------------------------------------------------------------------
+	//
 	//	Static methods
 	//
 	//--------------------------------------------------------------------------
+
+	//---------------------------------
+	//	Initialize
+	//---------------------------------
+	
+	/**
+	 *	Initializes the UI class. This is normally done automatically but can
+	 *	be called manually if rawChildrenClasses needs to be altered.
+	 */
+	static public function initialize():void
+	{
+		// Setup default rawChildren classes in UI
+		if(!rawChildrenClasses) {
+			rawChildrenClasses = [];
+		
+			var classes:Array = ["mx.containers.FormItem", "mx.containers.Panel"];
+			for each(var className:String in classes) {
+				var clazz:Class = Type.getClass(className);
+				if(clazz != null) {
+					rawChildrenClasses.push(clazz);
+				}
+			}
+			trace("initialize: " + rawChildrenClasses.join(", "));
+		}
+	}
+
 
 	//---------------------------------
 	//	Search
@@ -57,6 +103,11 @@ public class UI
 	static public function findAll(clazz:Object, root:DisplayObject,
 								   properties:Object=null, limit:uint=0):Array
 	{
+		// Initialize if necessary
+		if(!rawChildrenClasses) {
+			initialize();
+		}
+		
 		// Attempt to default root if not specified
 		if(!root) {
 			root = Melomel.stage;
@@ -140,19 +191,38 @@ public class UI
 		
 		// Recursively search over children
 		if(root is DisplayObjectContainer) {
-			var numChildren:int = (root as DisplayObjectContainer).numChildren;
-			for(var i:int=0; i<numChildren; i++) {
-				var child:DisplayObject = (root as DisplayObjectContainer).getChildAt(i);
-				
-				// If matching descendants are found then append to list
-				var arr:Array = _findAll(classes, child, properties);
-				if(arr.length) {
-					objects = objects.concat(arr);
+			// Determine child lists
+			var lists:Array = [root];
+			if(containerClass && root is containerClass) {
+				// If this is a TabNavigator and we're looking for a tab then
+				// search rawChildren
+				if(root is tabNavigatorClass && classes.indexOf(tabClass) != -1) {
+					lists.push((root as Object).rawChildren);
 				}
+			
+				for each(var rawChildrenClass:Class in rawChildrenClasses) {
+					if(root is rawChildrenClass) {
+						lists.push((root as Object).rawChildren);
+					}
+				}
+			}
+			
+			// Loop over all child lists
+			for each(var list:Object in lists) {
+				var numChildren:int = list.numChildren;
+				for(var i:int=0; i<numChildren; i++) {
+					var child:DisplayObject = list.getChildAt(i);
 				
-				// Exit if at limit.
-				if(limit > 0 && count >= limit) {
-					break;
+					// If matching descendants are found then append to list
+					var arr:Array = _findAll(classes, child, properties);
+					if(arr.length) {
+						objects = objects.concat(arr);
+					}
+				
+					// Exit if at limit.
+					if(limit > 0 && count >= limit) {
+						break;
+					}
 				}
 			}
 		}

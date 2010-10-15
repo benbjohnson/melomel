@@ -167,6 +167,20 @@ public class UITest
 		Assert.assertEquals(sandbox.firstNameLabel, component);
 	}
 
+	[Test(timeout="1000")]
+	public function shouldFindTabsOnTabNavigator():void
+	{
+		var tabs:Array = UI.findAll("mx.controls.tabBarClasses.Tab", sandbox);
+		Assert.assertEquals(3, tabs.length);
+	}
+
+	[Test(timeout="1000")]
+	public function shouldFindLabeledFormItemControl():void
+	{
+		var component:Object = UI.findLabeled("mx.controls.TextInput", "Lucky Number", sandbox);
+		Assert.assertEquals(sandbox.formItemTextInput, component);
+	}
+
 
 
 	//-----------------------------

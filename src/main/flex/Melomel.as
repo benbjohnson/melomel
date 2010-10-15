@@ -13,6 +13,7 @@ package
 {
 import melomel.core.Bridge;
 import melomel.core.Type;
+import melomel.core.UI;
 import melomel.errors.MelomelError;
 
 import flash.events.Event;
@@ -189,6 +190,7 @@ public class Melomel extends EventDispatcher
 		// Only initialize once.
 		if(initialized) return;
 		
+		// Find stage
 		stage = (topLevelApplication ? topLevelApplication.stage : null);
 	}
 

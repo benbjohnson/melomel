@@ -43,6 +43,12 @@
 		<mx:Label id="firstNameLabel"/>
 	</s:VGroup>
 	
+	<mx:Form>
+		<mx:FormItem label="Lucky Number">
+			<mx:TextInput id="formItemTextInput"/>
+		</mx:FormItem>
+	</mx:Form>
+	
 	<mx:TabNavigator creationPolicy="all">
 		<TestTab id="tab0"/>
 		<TestTab id="tab1"/>
