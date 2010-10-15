@@ -20,6 +20,10 @@ import flash.events.EventDispatcher;
  */
 public class MXMLMelomel implements IMXMLObject
 {
+	public var debug:Boolean;
+	public var host:String;
+	public var port:int;
+
 	public function initialized(document:Object, id:String):void {}
 }
 }

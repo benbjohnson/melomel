@@ -52,6 +52,11 @@ public class MXMLMelomel implements IMXMLObject
 	//--------------------------------------------------------------------------
 
 	/**
+	 *	A flag stating if debugging should be enabled.
+	 */
+	public var debug:Boolean = false;
+
+	/**
 	 *	The hostname to connect to.
 	 */
 	public var host:String = "localhost";
@@ -60,7 +65,7 @@ public class MXMLMelomel implements IMXMLObject
 	 *	The port to connect to on the host.
 	 */
 	public var port:int = 10101;
-	
+
 
 	//--------------------------------------------------------------------------
 	//
@@ -72,6 +77,7 @@ public class MXMLMelomel implements IMXMLObject
 	{
 		// Wait until creation complete before we connect
 		document.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void{
+			Melomel.debug = debug;
 			Melomel.connect(host, port);
 		});
 	}

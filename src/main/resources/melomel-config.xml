@@ -25,6 +25,10 @@
 		<class>MelomelClasses</class>
 	</include-classes>
 
+	<include-namespaces>
+		<uri>library://melomel/2010</uri>
+	</include-namespaces>
+
 	<metadata>
 		<creator>Ben Johnson</creator>
 		<contributor>Ben Johnson</contributor>
