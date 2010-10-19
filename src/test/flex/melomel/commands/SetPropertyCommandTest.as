@@ -197,6 +197,16 @@ public class SetPropertyCommandTest
 		command.value = "baz";
 		command.execute();
 	}
+
+	[Test]
+	public function shouldMutateArrayElement():void
+	{
+		command.object = ["foo", "bar", "baz"];
+		command.property = "[1]";
+		command.value = "xxx";
+		command.execute();
+		Assert.assertEquals("xxx", command.object[1]);
+	}
 }
 }
 

@@ -28,5 +28,8 @@ internal class MelomelClasses
 
 	// Formatters
 	import melomel.commands.formatters.ObjectFormatter; ObjectFormatter;
+
+	// MXML
+	import melomel.mxml.MXMLMelomel; MXMLMelomel;
 }
 }

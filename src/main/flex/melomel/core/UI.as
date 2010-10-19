@@ -13,6 +13,8 @@ package melomel.core
 {
 import melomel.errors.MelomelError;
 
+import mx.containers.TabNavigator;
+
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
@@ -30,13 +32,63 @@ public class UI
 {
 	//--------------------------------------------------------------------------
 	//
+	//	Static Properties
+	//
+	//--------------------------------------------------------------------------
+
+	/**
+	 *	A list of components whose rawChildren should be searched. This
+	 *	defaults to the FormItem and Panel but other classes can
+	 *	be added manually.
+	 */
+	static public var rawChildrenClasses:Array;
+
+	static private var containerClass:Class = Type.getClass("mx.core.Container");
+	static private var tabNavigatorClass:Class = Type.getClass("mx.containers.TabNavigator");
+	static private var tabClass:Class = Type.getClass("mx.controls.tabBarClasses.Tab");
+	
+
+	//--------------------------------------------------------------------------
+	//
 	//	Static methods
 	//
 	//--------------------------------------------------------------------------
 
 	//---------------------------------
+	//	Initialize
+	//---------------------------------
+	
+	/**
+	 *	Initializes the UI class. This is normally done automatically but can
+	 *	be called manually if rawChildrenClasses needs to be altered.
+	 */
+	static public function initialize():void
+	{
+		// Setup default rawChildren classes in UI
+		if(!rawChildrenClasses) {
+			rawChildrenClasses = [];
+		
+			var classes:Array = ["mx.containers.FormItem", "mx.containers.Panel"];
+			for each(var className:String in classes) {
+				var clazz:Class = Type.getClass(className);
+				if(clazz != null) {
+					rawChildrenClasses.push(clazz);
+				}
+			}
+			trace("initialize: " + rawChildrenClasses.join(", "));
+		}
+	}
+
+
+	//---------------------------------
 	//	Search
 	//---------------------------------
+	
+	/**
+	 *	A running count of matched objects within findAll(). This is not thread
+	 *	safe but luckily Flash only has one thread.
+	 */
+	static private var count:uint = 0;
 	
 	/**
 	 *	Recursively searches the display hiearchy to find a display object.
@@ -49,8 +101,13 @@ public class UI
 	 *	                   properties specified in the criteria.
 	 */
 	static public function findAll(clazz:Object, root:DisplayObject,
-								   properties:Object=null):Array
+								   properties:Object=null, limit:uint=0):Array
 	{
+		// Initialize if necessary
+		if(!rawChildrenClasses) {
+			initialize();
+		}
+		
 		// Attempt to default root if not specified
 		if(!root) {
 			root = Melomel.stage;
@@ -65,50 +122,107 @@ public class UI
 			throw new MelomelError("The root display object is required");
 		}
 		
+		// Convert clazz into an Array of classes.
+		if(!(clazz is Array)) {
+			clazz = [clazz];
+		}
+		
 		// Convert class name to class reference, if necessary
-		if(clazz is String) {
-			try {
-				clazz = getDefinitionByName(clazz as String);
-			}
-			catch(e:Error) {
-				throw new MelomelError("Cannot find class: " + clazz);
+		for(var i:int=0; i<clazz.length; i++) {
+			if(clazz[i] is String) {
+				try {
+					clazz[i] = getDefinitionByName(clazz[i] as String);
+				}
+				catch(e:Error) {
+					clazz.splice(i--, 1);
+				}
 			}
 		}
 		
+		// Throw error if none of the classes passed in were found.
+		if(clazz.length == 0) {
+			throw new MelomelError("Classes could not be found");
+		}
+
+		count = 0;
+		return _findAll(clazz as Array, root, properties);
+	}
+
+	static private function _findAll(classes:Array, root:DisplayObject,
+								     properties:Object, limit:uint=0):Array
+	{
 		// Match root object first
 		var objects:Array = new Array();
-
-		if(root is (clazz as Class)) {
-			var isMatch:Boolean = true;
-
-			if(properties) {
-				// Match display object on properties
-				for(var propName:String in properties) {
-					if(!root.hasOwnProperty(propName) ||
-					   root[propName] != properties[propName])
-					{
-						isMatch = false;
-						break;
+		
+		// Attempt to match all classes
+		var match:Boolean;
+		for each(var clazz:Class in classes) {
+			match = false;
+			
+			if(root is clazz) {
+				match = true;
+				
+				if(properties) {
+					// Match display object on properties
+					for(var propName:String in properties) {
+						if(!root.hasOwnProperty(propName) ||
+						   root[propName] != properties[propName])
+						{
+							match = false;
+							break;
+						}
 					}
 				}
 			}
 			
-			// If class and properties match then add to list of components
-			if(isMatch && isVisible(root)) {
-				objects.push(root);
+			if(match) {
+				break;
+			}
+		}
+
+		// If class and properties match then add to list of components
+		if(match && isVisible(root)) {
+			objects.push(root);
+			
+			if(limit > 0 && ++count >= limit) {
+				return objects;
 			}
 		}
 		
 		// Recursively search over children
 		if(root is DisplayObjectContainer) {
-			var numChildren:int = (root as DisplayObjectContainer).numChildren;
-			for(var i:int=0; i<numChildren; i++) {
-				var child:DisplayObject = (root as DisplayObjectContainer).getChildAt(i);
+			// Determine child lists
+			var lists:Array = [root];
+			if(containerClass && root is containerClass) {
+				// If this is a TabNavigator and we're looking for a tab then
+				// search rawChildren
+				if(root is tabNavigatorClass && classes.indexOf(tabClass) != -1) {
+					lists.push((root as Object).rawChildren);
+				}
+			
+				for each(var rawChildrenClass:Class in rawChildrenClasses) {
+					if(root is rawChildrenClass) {
+						lists.push((root as Object).rawChildren);
+					}
+				}
+			}
+			
+			// Loop over all child lists
+			for each(var list:Object in lists) {
+				var numChildren:int = list.numChildren;
+				for(var i:int=0; i<numChildren; i++) {
+					var child:DisplayObject = list.getChildAt(i);
 				
-				// If matching descendants are found then append to list
-				var arr:Array = findAll(clazz, child, properties);
-				if(arr.length) {
-					objects = objects.concat(arr);
+					// If matching descendants are found then append to list
+					var arr:Array = _findAll(classes, child, properties);
+					if(arr.length) {
+						objects = objects.concat(arr);
+					}
+				
+					// Exit if at limit.
+					if(limit > 0 && count >= limit) {
+						break;
+					}
 				}
 			}
 		}
@@ -130,8 +244,42 @@ public class UI
 	static public function find(clazz:Object, root:DisplayObject,
 								properties:Object=null):*
 	{
-		var objects:Array = findAll(clazz, root, properties);
+		var objects:Array = findAll(clazz, root, properties, 1);
 		return objects.shift();
+	}
+
+	/**
+	 *	Attempts to find a component based on its position relative to a label.
+	 *	This method starts by finding the label, then going up the parent
+	 *	hierarchy and then recursively searching the parent for the first
+	 *	component matching a given class.
+	 *	
+	 *	@param clazz       The class to match.
+	 *	@param labelText   The label text to match.
+	 *	@param root        The root display object to start from.
+	 *	@param properties  A hash of property values to match.
+	 *	
+	 *	@return            The display object that is labeled by another
+	 *                     display object.
+	 */
+	static public function findLabeled(clazz:Object, labelText:String,
+									   root:DisplayObject,
+									   properties:Object=null):*
+	{
+		// First find label
+		var label:DisplayObject = find(['mx.controls.Label', 'spark.components.Label'], root, {text:labelText})
+		
+		// If found, recursively search parent for component
+		if(label && label.parent) {
+			var components:Array = findAll(clazz, label.parent, properties);
+			if(components.indexOf(label) != -1) {
+				components.splice(components.indexOf(label), 1);
+			}
+			return components.shift();
+		}
+
+		// If no label found, return null.
+		return null;
 	}
 
 	/**
@@ -268,10 +416,8 @@ public class UI
 	static public function click(component:InteractiveObject,
 								 properties:Object=null):void
 	{
-		// NOTE: There is currently an error fired from ActiveWindowManager
-		//       when the MOUSE_DOWN event is fired.
-		// mouseDown(component, properties);
-		// mouseUp(component, properties);
+		mouseDown(component, properties);
+		mouseUp(component, properties);
 		
 		interact(new MouseEvent(MouseEvent.CLICK), component, properties)
 	}
@@ -372,6 +518,37 @@ public class UI
 		keyUp(component, char, properties);
 	}
 	
+
+	//---------------------------------
+	//	Data Control Interaction
+	//---------------------------------
+
+	/**
+	 *	Generates a list of labels from a data control.
+	 *
+	 *	@param component  A data control or column which has an itemToLabel()
+	 *	                  method.
+	 *	@param data       The dataset to generate labels from.
+	 *
+	 *	@return           A list of labels generated by the component.
+	 */
+	static public function itemsToLabels(component:Object, data:Object):Array
+	{
+		// Use source property if this is an ArrayList.
+		if(Type.typeOf(data, "mx.collections.ArrayList")) {
+			data = data.source;
+		}
+		
+		// Loop over collection and generate labels
+		var labels:Array = [];
+		
+		for each(var item:Object in data) {
+			labels.push(component.itemToLabel(item));
+		}
+		
+		return labels;
+	}
+
 
 	//--------------------------------------------------------------------------
 	//

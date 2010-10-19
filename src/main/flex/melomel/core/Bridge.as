@@ -212,7 +212,10 @@ public class Bridge extends EventDispatcher
 	 */
 	public function send(message:XML):void
 	{
-		if(Melomel.debug) trace("send> " + message.toXMLString());
+		if(Melomel.debug) {
+			trace("send> " + message.toXMLString());
+			trace("");
+		}
 		if(socket && socket.connected) {
 			socket.send(message);
 		}

@@ -1,14 +1,19 @@
-== 0.3.0 (2010-09-20)
+0.4.2 (2010-09-06)
+* Added multiple class matching support to find() and findAll().
+* Added limits to find() and findAll() to speed up searching.
 
+0.4.1 (2010-09-05)
+* Changed find() and findAll() to default to the stage as the root.
+
+0.4.0
+* Added throwable to all actions.
+
+0.3.0 (2010-09-20)
 * Synced version numbers between Melomel & Melomel.rb.
 * Added 'Invoke Function' to invoke top-level functions. (Nikita Dudnik)
 
-
-== 0.1.1 (2010-06-01)
-
+0.1.1 (2010-06-01)
 * Fixed Melomel UI so that it only finds visible components now.
 
-
-== 0.1.0 (2010-06-01)
-
+0.1.0 (2010-06-01)
 * Initial release

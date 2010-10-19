@@ -92,8 +92,17 @@ public class GetPropertyCommand implements ICommand
 			throw new MelomelError("Property name cannot be null or blank.");
 		}
 
-		// Try to access as property first.
-		if(Type.hasProperty(object, property, Type.READ)) {
+
+		// If this is an array accessor, treat it like an array.
+		if(property.search(/^\[\d+\]$/) != -1) {
+			if(!(object is Array)) {
+				throw new MelomelError("Cannot use an array accessor on a non-Array object.");
+			}
+			var index:int = parseInt(property.slice(1, property.length-1));
+			return object[index];
+		}
+		// Try to access as property.
+		else if(Type.hasProperty(object, property, Type.READ)) {
 			return object[property];
 		}
 		// Otherwise try a zero-arg method.

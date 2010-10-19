@@ -185,6 +185,15 @@ public class GetPropertyCommandTest
 		command.throwable = false;
 		command.execute();
 	}
+
+	[Test]
+	public function shouldAccessArrayElement():void
+	{
+		command.object = ["foo", "bar", "baz"];
+		command.property = "[1]";
+		command.throwable = false;
+		Assert.assertEquals("bar", command.execute());
+	}
 }
 }
 
