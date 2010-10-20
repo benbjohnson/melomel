@@ -1,3 +1,16 @@
+0.6.1 (2010-10-19)
+* Fixed issue found when upgrading from v0.4.2 to v0.6.0. [#14]
+
+0.6.0 (2010-10-14)
+* Added Wait interface.
+* Added stub swc.
+* Added TabNavigator, FormItem & Panel support.
+* Fixed manifest/namespace issue.
+
+0.5.0 (2010-10-08)
+* Added UI.findLabeled() & UI.itemsToLabels().
+* Added access to array by index.
+
 0.4.2 (2010-09-06)
 * Added multiple class matching support to find() and findAll().
 * Added limits to find() and findAll() to speed up searching.
