@@ -196,7 +196,9 @@ public class UI
 			if(containerClass && root is containerClass) {
 				// If this is a TabNavigator and we're looking for a tab then
 				// search rawChildren
-				if(root is tabNavigatorClass && classes.indexOf(tabClass) != -1) {
+				if(tabNavigatorClass && tabClass && root is tabNavigatorClass &&
+				   classes && classes.indexOf(tabClass) != -1)
+				{
 					lists.push((root as Object).rawChildren);
 				}
 			
