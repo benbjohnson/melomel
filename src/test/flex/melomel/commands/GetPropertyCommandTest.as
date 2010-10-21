@@ -45,6 +45,14 @@ public class GetPropertyCommandTest
 		command.property = "foo";
 		Assert.assertEquals("bar", command.execute());
 	}
+	
+	[Test]
+	public function executeForUndefinedProperty():void
+	{
+		command.object = {foo:"bar"};
+		command.property = "fee";
+		Assert.assertEquals(command.execute(), null);
+	}
 
 	[Test]
 	public function shouldRetrieveNonDyamicProperty():void
