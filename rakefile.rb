@@ -11,11 +11,11 @@ gem_wrap :make_melomel_gem do |t|
   t.author = 'Nikita Dudnik'
   t.email = 'nikdudnik@gmail.com'
   t.homepage = "http://melomel.info"
-  t.version = '0.6.1'
+  t.version = '0.6.1.1'
   # t.description = "This gem provides a compiled swc file of Melomel (http://melomel.info) to use with project Sprouts (http://projectsprouts.org).
   # 
   # Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages. This is especially useful for integrating Flash into a full stack functional testing solution such as Cucumber or RSpec."
-  t.summary = "Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages."
+  t.summary = "Melomel: External ActionScript Interface. Use with project Sprouts."
   t.sprout_spec   = "
     - !ruby/object:Sprout::RemoteFileTarget
       platform: universal
@@ -29,8 +29,8 @@ gem_wrap :make_melomel_stub_gem do |t|
   t.author = 'Nikita Dudnik'
   t.email = 'nikdudnik@gmail.com'
   t.homepage = "http://melomel.info"
-  t.version = '0.6.1'
-  t.summary = "Stub of Melomel library (see melomel-sprout-library gem). Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages."
+  t.version = '0.6.1.1'
+  t.summary = "Stub of the the Melomel library. Use with project Sprouts."
   # t.description = "This gem provides a compiled stub swc file of Melomel (http://melomel.info) to use with project Sprouts (http://projectsprouts.org).
   # 
   # Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages. This is especially useful for integrating Flash into a full stack functional testing solution such as Cucumber or RSpec."
