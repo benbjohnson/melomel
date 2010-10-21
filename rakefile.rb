@@ -1,9 +1,5 @@
 require 'sprout'
 require 'sprout/flex4sdk/version'
-#Comment out the above and uncomment the next line in order to use the flex3sdk
-#require 'sprout/flex3sdk/version'
-
-# Load gems from a server other than rubyforge:
 sprout 'as3'
 
 gem_wrap :make_melomel_gem do |t|
@@ -12,9 +8,6 @@ gem_wrap :make_melomel_gem do |t|
   t.email = 'nikdudnik@gmail.com'
   t.homepage = "http://melomel.info"
   t.version = '0.6.1.1'
-  # t.description = "This gem provides a compiled swc file of Melomel (http://melomel.info) to use with project Sprouts (http://projectsprouts.org).
-  # 
-  # Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages. This is especially useful for integrating Flash into a full stack functional testing solution such as Cucumber or RSpec."
   t.summary = "Melomel: External ActionScript Interface. Use with project Sprouts."
   t.sprout_spec   = "
     - !ruby/object:Sprout::RemoteFileTarget
@@ -31,9 +24,6 @@ gem_wrap :make_melomel_stub_gem do |t|
   t.homepage = "http://melomel.info"
   t.version = '0.6.1.1'
   t.summary = "Stub of the the Melomel library. Use with project Sprouts."
-  # t.description = "This gem provides a compiled stub swc file of Melomel (http://melomel.info) to use with project Sprouts (http://projectsprouts.org).
-  # 
-  # Melomel is an API for accessing ActionScript objects in the Flash virtual machine through external languages. This is especially useful for integrating Flash into a full stack functional testing solution such as Cucumber or RSpec."
   t.sprout_spec   = "
     - !ruby/object:Sprout::RemoteFileTarget
       platform: universal
