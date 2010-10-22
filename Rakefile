@@ -56,8 +56,8 @@ task :release do
   
   # Build melomel gem
   Rake::Task["build_melomel_gem"].invoke
-  sh "gem push target/sprout-melomel-library-#{Melomel::VERSION}.gem"
-  sh "rm target/sprout-melomel-#{Melomel::VERSION}.gem"
+  #sh "gem push target/sprout-melomel-library-#{Melomel::VERSION}.gem"
+  sh "rm target/sprout-melomel-library-#{Melomel::VERSION}.gem"
   
   # Build melomel stub gem
   Rake::Task["build_melomel_stub_gem"].invoke
