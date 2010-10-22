@@ -1,3 +1,6 @@
+0.6.2 (2010-10-21)
+* Added Sprout support. (Nikita Dudnik)
+
 0.6.1 (2010-10-19)
 * Fixed issue found when upgrading from v0.4.2 to v0.6.0. [#14]
 
