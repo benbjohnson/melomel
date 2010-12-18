@@ -1,3 +1,6 @@
+0.6.3 (2010-12-18)
+* Changed that find() method to search the active window in AIR applications.
+
 0.6.2 (2010-10-21)
 * Added Sprout support. (Nikita Dudnik)
 
