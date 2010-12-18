@@ -110,7 +110,15 @@ public class UI
 		
 		// Attempt to default root if not specified
 		if(!root) {
-			root = Melomel.stage;
+			// If running AIR, use the active window's stage
+			var nativeApplicationClass:Class = Type.getClass("flash.desktop.NativeApplication");
+			if(nativeApplicationClass && nativeApplicationClass.nativeApplication.activeWindow) {
+				root = nativeApplicationClass.nativeApplication.activeWindow.stage;
+			}
+			// Otherwise use the stage
+			else {
+				root = Melomel.stage;
+			}
 		}
 		
 		// Verify class is not null

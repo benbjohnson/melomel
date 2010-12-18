@@ -9,6 +9,8 @@
 
 		public function onCreationComplete(event:Event):void
 		{
+			Melomel.debug = true;
+
 			trace("Connecting to bridge");
 			var bridge:Bridge = new Bridge();
 			bridge.addEventListener(Event.CONNECT, function(event:Event):void{

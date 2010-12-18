@@ -19,6 +19,10 @@ import mx.managers.PopUpManager;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
+import flash.display.NativeWindow;
+import flash.display.NativeWindowInitOptions;
+import flash.desktop.NativeApplication;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.ui.Keyboard;
@@ -32,6 +36,7 @@ public class UITest
 	//---------------------------------------------------------------------
 	
 	private var sandbox:Sandbox;
+	private var window:NativeWindow;
 	
 	[Before(async)]
 	public function setUp():void
@@ -46,6 +51,10 @@ public class UITest
 	{
 		UIImpersonator.removeChild(sandbox);
 		sandbox = null;
+		
+		if(window) {
+			window.close();
+		}
 	}
 	
 	
@@ -237,6 +246,19 @@ public class UITest
 		var component:DisplayObject = UI.find(Panel, null, {title:"Foo"});
 		PopUpManager.removePopUp(panel);
 		Assert.assertEquals(panel, component);
+	}
+
+	[Test(timeout="1000")]
+	public function shouldFindInActiveWindow():void
+	{
+		var sprite:Sprite = new Sprite();
+		sprite.name = "foo";
+		window = new NativeWindow(new NativeWindowInitOptions());
+		window.stage.addChild(sprite);
+		window.activate();
+		
+		var component:DisplayObject = UI.find(Sprite, null, {name:"foo"});
+		Assert.assertEquals(sprite, component);
 	}
 
 

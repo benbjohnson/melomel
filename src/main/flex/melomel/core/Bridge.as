@@ -341,6 +341,8 @@ public class Bridge extends EventDispatcher
 	
 	private function socket_onSecurityError(event:SecurityErrorEvent):void
 	{
+		event.stopImmediatePropagation();
+		event.preventDefault();
 		if(Melomel.debug) trace("[SECURITY_ERROR] " + event.text);
 	}
 }
