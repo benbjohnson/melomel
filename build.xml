@@ -7,7 +7,7 @@
     <property name="mxmlc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
     <property name="asdoc.jar" value="${FLEX_HOME}/lib/mxmlc.jar" />
 
-    <property name="version" value="0.6.3"/>
+    <property name="version" value="0.6.4"/>
 
 	<property name="doc.dir" value="${basedir}/doc"/>
 	<property name="etc.dir" value="${basedir}/etc"/>
