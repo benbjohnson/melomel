@@ -191,7 +191,9 @@ public class Melomel extends EventDispatcher
 		if(initialized) return;
 		
 		// Find stage
-		stage = (topLevelApplication ? topLevelApplication.stage : null);
+		if(topLevelApplication) {
+			stage = topLevelApplication.stage;
+		}
 	}
 
 
