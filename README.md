@@ -12,6 +12,11 @@ Please visit the [http://melomel.info](http://melomel.info) for full
 documentation.
 
 
+## Questions & Support
+
+If you need any help getting started, feel free to join the Melomel mailing list and ask a question. You can join by sending a blank e-mail to [melomel@librelist.com](mailto:melomel@librelist.com).
+
+
 ## Contribute
 
 If you want to get involved, please see the
