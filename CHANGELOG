@@ -1,3 +1,6 @@
+0.6.6 (2011-04-13)
+* Fixed Windows connection issue caused by auto retry. (Adam Flater)
+
 0.6.5 (2011-04-05)
 * Fixed Stage retrieval for AS3-only projects. (Simon Gregory)
 
