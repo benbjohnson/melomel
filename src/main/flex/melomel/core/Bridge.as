@@ -103,13 +103,6 @@ public class Bridge extends EventDispatcher
 	public var port:int;
 
 	/**
-	 *	The length of time, in milliseconds, to wait in between retries when
-	 *	connecting to the external interface. If this is set to zero, the
-	 *	connection is not retried when it fails.
-	 */
-	public var retryDelay:int = 1000;
-
-	/**
 	 *	The timeout identifier for connection attempts.
 	 */
 	private var connectTimeoutId:int = 0;
@@ -177,11 +170,6 @@ public class Bridge extends EventDispatcher
 		socket.addEventListener(IOErrorEvent.IO_ERROR, socket_onIOError);
 		socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, socket_onSecurityError);
 		socket.connect(host, port);
-		
-		// Attempt connection again if not connected
-		if(retryDelay > 0) {
-			connectTimeoutId = setTimeout(connect, retryDelay);
-		}
 	}
 	
 	/**
