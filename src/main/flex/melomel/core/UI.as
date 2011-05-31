@@ -75,7 +75,6 @@ public class UI
 					rawChildrenClasses.push(clazz);
 				}
 			}
-			trace("initialize: " + rawChildrenClasses.join(", "));
 		}
 	}
 
