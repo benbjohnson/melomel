@@ -1,3 +1,6 @@
+0.6.7 (2011-05-31)
+* Remove leftover trace statement. (Daniel Brockman)
+
 0.6.6 (2011-04-13)
 * Fixed Windows connection issue caused by auto retry. (Adam Flater)
 
