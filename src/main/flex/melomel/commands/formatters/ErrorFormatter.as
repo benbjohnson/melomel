@@ -106,9 +106,7 @@ public class ErrorFormatter
 		
 		// Append stack trace, if available and enabled.
 		if(stackTraceEnabled && error.getStackTrace()) {
-			var child:XML = <stack-trace/>;
-			child.appendChild(error.getStackTrace());
-			message.appendChild(child);
+			message.appendChild(<stack-trace>{error.getStackTrace()}</stack-trace>);
 		}
 
 		return message;
