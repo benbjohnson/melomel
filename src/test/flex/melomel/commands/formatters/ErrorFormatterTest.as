@@ -66,7 +66,12 @@ public class ErrorFormatterTest
 	{
 		var error:Error;
 		try {
-			throw new Error();
+      // Anonymous functions make the stace trace look like XML,
+      // so we need to ensure that they cause no trouble.
+      //
+      // XXX: Unfortunately, for some reason this test does not
+      //      trigger the bad behavior we are trying to avoid.
+			(function () : void { throw new Error(); })();
 		}
 		catch(e:Error) {
 			error = e;
