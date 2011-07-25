@@ -1,6 +1,6 @@
 <flex-config>
 	<output>../../../target/test/TestRunner.swf</output>
-	<target-player>10.0.0</target-player>
+	<target-player>10.2.0</target-player>
 	<benchmark>false</benchmark>
 	<warnings>true</warnings>
 
