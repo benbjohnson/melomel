@@ -94,6 +94,11 @@ public class Melomel extends EventDispatcher
 	//---------------------------------
 
 	/**
+	 *	The default number of frames to wait.
+	 */
+	static public var defaultFramesToWait:uint = 5;
+
+	/**
 	 *	The current frame.
 	 */
 	static protected var currentFrame:uint = 0;
@@ -223,8 +228,12 @@ public class Melomel extends EventDispatcher
 	 *	Sets <code>Melomel.busy</code> to <code>true</code> for the specified
 	 *	number of frames.
 	 */
-	static public function wait(count:int=5):void
+	static public function wait(count:int=-1):void
 	{
+		if(count < 0) {
+			count = defaultFramesToWait;
+		}
+		
 		waitFrame = currentFrame + count;
 	}
 	
