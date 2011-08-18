@@ -68,7 +68,11 @@ public class UI
 		if(!rawChildrenClasses) {
 			rawChildrenClasses = [];
 		
-			var classes:Array = ["mx.containers.FormItem", "mx.containers.Panel"];
+			var classes:Array = [
+				"mx.core.Application",
+				"mx.containers.FormItem",
+				"mx.containers.Panel"
+			];
 			for each(var className:String in classes) {
 				var clazz:Class = Type.getClass(className);
 				if(clazz != null) {
