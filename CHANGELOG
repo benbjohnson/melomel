@@ -1,3 +1,6 @@
+0.6.10 (201108-18)
+* Add Application to list of classes to search rawChildren for.
+
 0.6.7 (2011-05-31)
 * Remove leftover trace statement. (Daniel Brockman)
 
