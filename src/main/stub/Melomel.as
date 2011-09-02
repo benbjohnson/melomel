@@ -12,6 +12,7 @@
 package
 {
 import flash.events.EventDispatcher;
+import flash.display.Stage;
 
 /**
  *	This class stubs the public methods that may be used in a Flash
@@ -21,7 +22,7 @@ import flash.events.EventDispatcher;
 public class Melomel extends EventDispatcher
 {
 	static public var debug:Boolean = false;
-	static public var stage:flash.display.Stage;
+	static public var stage:Stage;
 	static public function connect(host:String="localhost", port:int=10101):void {}
 }
 }

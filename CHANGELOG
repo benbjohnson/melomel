@@ -1,4 +1,7 @@
-0.6.10 (201108-18)
+0.6.11 (2011-09-02)
+* Add Melomel.stage to stub. (Nek)
+
+0.6.10 (2011-08-18)
 * Add Application to list of classes to search rawChildren for.
 
 0.6.7 (2011-05-31)
