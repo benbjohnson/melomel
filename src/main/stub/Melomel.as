@@ -21,6 +21,7 @@ import flash.events.EventDispatcher;
 public class Melomel extends EventDispatcher
 {
 	static public var debug:Boolean = false;
+	static public var stage:flash.display.Stage;
 	static public function connect(host:String="localhost", port:int=10101):void {}
 }
 }
