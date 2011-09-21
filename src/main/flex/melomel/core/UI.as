@@ -563,6 +563,51 @@ public class UI
 	}
 
 
+	//---------------------------------
+	//	Tree access
+	//---------------------------------
+
+	/**
+	 *	Retrieves an item from a Tree control by label.
+	 *
+	 *	@param tree   A Flex tree.
+	 *	@param label  The label of the item in the tree.
+	 *
+	 *	@return       The item in the tree that matches the label.
+	 */
+	static public function findTreeItemByLabel(tree:Object, label:String):Object
+	{
+		if(tree == null || tree.dataProvider == null) {
+			return null;
+		}
+		
+		return _findTreeItemByLabel(tree, label, tree.dataProvider.getItemAt(0));
+	}
+	
+	static private function _findTreeItemByLabel(tree:Object, label:String, data:Object):Object
+	{
+		// If the label matches then return it
+		var labelString:String = tree.itemToLabel(data);
+		if(labelString == label) {
+			return data;
+		}
+		
+		// Otherwise search children
+		var children:Object = tree.dataDescriptor.getChildren(data);
+		if(children) {
+			for each(var child:Object in children) {
+				var ret:Object = _findTreeItemByLabel(tree, label, child);
+				if(ret) {
+					return ret;
+				}
+			}
+		}
+		
+		// Nothing found.
+		return null;
+	}
+
+
 	//--------------------------------------------------------------------------
 	//
 	//	Constructor

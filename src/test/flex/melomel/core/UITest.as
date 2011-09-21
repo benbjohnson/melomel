@@ -12,6 +12,7 @@ import spark.components.TextInput;
 import mx.collections.ArrayList;
 import mx.controls.ComboBox;
 import mx.controls.DataGrid;
+import mx.controls.Tree;
 import mx.containers.Panel;
 import mx.core.FlexGlobals;
 import mx.events.FlexEvent;
@@ -402,6 +403,36 @@ public class UITest
 		Assert.assertEquals(2, labels.length);
 		Assert.assertEquals("foo", labels[0]);
 		Assert.assertEquals("bar", labels[1]);
+	}
+
+
+	//-----------------------------
+	//  Tree
+	//-----------------------------
+
+	[Test]
+	public function shouldFindTreeItemByLabel():void
+	{
+		var tree:Tree = new mx.controls.Tree();
+		tree.labelField = "label";
+		var bazObject:Object = {label:"baz"};
+		var data:Object = {
+			label:"root",
+			children:[
+				{label:"foo"},
+				{
+					label:"bar",
+					children: [
+						bazObject,
+						{label:"bat"}
+					]
+				}
+			]
+		};
+		tree.dataProvider = data;
+		
+		var item:Object = UI.findTreeItemByLabel(tree, "baz");
+		Assert.assertEquals(bazObject, item);
 	}
 }
 }
